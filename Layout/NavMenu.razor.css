@@ -1,5 +1,6 @@
-/* Layout/NavMenu.razor.css */
-
+.navbar {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
 .navbar-brand {
     font-weight: 600;
     font-size: 1.4rem; /* Logoyu biraz büyütür */
@@ -33,4 +34,36 @@
     vertical-align: top;
     position: relative;
     top: -2px; /* Sayacı biraz yukarı kaydırır */
+}
+
+/* YENİ EKLENEN STİLLER (DÜZENLENDİ) */
+
+/* Avatar ikonunu biraz daha belirgin hale getirir ve hizalar */
+.navbar-nav .dropdown-toggle i {
+    font-size: 1.3rem; /* Boyutu biraz küçülttük (1.5rem idi) */
+    font-style: normal; /* "İtalik" görünümü kaldırmak için */
+    vertical-align: middle;
+    margin-right: 0; 
+}
+
+/* Dropdown menü içindeki ikonları hizalar */
+.dropdown-item i {
+    margin-right: 6px;
+    vertical-align: text-top;
+    font-size: 1rem;
+}
+
+/* Masaüstünde (lg ve üzeri) dropdown'ı hover ile açar (DÜZENLENDİ) */
+@media (min-width: 992px) {
+    .dropdown:hover .dropdown-menu {
+        display: block;
+        margin-top: .125rem; /* Navbar ile arasında hafif bir boşluk bırakır (0 idi) */
+        right: 0; /* Konumu sağa sıfırlar (Bootstrap 5'in 'dropdown-menu-end' hizalamasını garantiler) */
+        left: auto; /* Sol konumlamayı iptal eder */
+    }
+
+    /* Hover ile açıldığında avatar linkinin de aktif görünmesini sağlar */
+    .dropdown:hover .nav-link.dropdown-toggle {
+         color: rgba(255,255,255,.9) !important;
+    }
 }

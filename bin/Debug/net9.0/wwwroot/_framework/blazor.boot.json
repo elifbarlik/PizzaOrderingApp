@@ -1,11 +1,12 @@
 {
   "mainAssemblyName": "Pitzam",
   "resources": {
-    "hash": "sha256-BTyPAKzsmhpFDHjl9qOxv09DhmvjZ2Yik0hSq9OLmuk=",
+    "hash": "sha256-KiNKgXuP9/bamw+VAHphyESlBiNqXo1iBS1JbCD3Qvk=",
     "fingerprinting": {
       "Blazored.LocalStorage.12n6dz54qr.wasm": "Blazored.LocalStorage.wasm",
       "Microsoft.AspNetCore.Authorization.z6jo10m0rd.wasm": "Microsoft.AspNetCore.Authorization.wasm",
       "Microsoft.AspNetCore.Components.65wbz7t8mt.wasm": "Microsoft.AspNetCore.Components.wasm",
+      "Microsoft.AspNetCore.Components.Authorization.9360opbhdf.wasm": "Microsoft.AspNetCore.Components.Authorization.wasm",
       "Microsoft.AspNetCore.Components.Forms.ysqd97eroy.wasm": "Microsoft.AspNetCore.Components.Forms.wasm",
       "Microsoft.AspNetCore.Components.Web.bl11wz56ub.wasm": "Microsoft.AspNetCore.Components.Web.wasm",
       "Microsoft.AspNetCore.Components.WebAssembly.fi19frkgoe.wasm": "Microsoft.AspNetCore.Components.WebAssembly.wasm",
@@ -202,8 +203,8 @@
       "icudt_CJK.tjcz0u77k5.dat": "icudt_CJK.dat",
       "icudt_EFIGS.tptq2av103.dat": "icudt_EFIGS.dat",
       "icudt_no_CJK.lfu7j35m59.dat": "icudt_no_CJK.dat",
-      "Pitzam.5ds5xz1ybg.wasm": "Pitzam.wasm",
-      "Pitzam.u2m0is4ti6.pdb": "Pitzam.pdb"
+      "Pitzam.67jlt77n0q.wasm": "Pitzam.wasm",
+      "Pitzam.daokusqash.pdb": "Pitzam.pdb"
     },
     "jsModuleNative": {
       "dotnet.native.9ih887ebfz.js": "sha256-oS7IRiQoVt9ThQ7Y2UM3XoeY0JqPD02cg9IvRdufn2w="
@@ -227,6 +228,7 @@
       "Blazored.LocalStorage.12n6dz54qr.wasm": "sha256-OaMAAd5n7ORfyur5e3QIyEVKJ76MKIvwbg7/icnnYcU=",
       "Microsoft.AspNetCore.Authorization.z6jo10m0rd.wasm": "sha256-K3j153B4Qx57/sHT4gOICXyadidNa4qEUflLPz/OgCU=",
       "Microsoft.AspNetCore.Components.65wbz7t8mt.wasm": "sha256-esbkeXi/0iIJjs+MdmPU6nulNqIzqOw5a4hLgs2f6+U=",
+      "Microsoft.AspNetCore.Components.Authorization.9360opbhdf.wasm": "sha256-K9VNGeCmwA3gBLU1Vsf8DhnIHnrl43Xg+3UIFZDpvUA=",
       "Microsoft.AspNetCore.Components.Forms.ysqd97eroy.wasm": "sha256-8o1e7d2phwhchCrOcBV5r/UklI0sSixpCl8wQkEHNfE=",
       "Microsoft.AspNetCore.Components.Web.bl11wz56ub.wasm": "sha256-seVr0qaYsEvzHri1us/k177XjM/aeDGtoKx6cwtF5Zo=",
       "Microsoft.AspNetCore.Components.WebAssembly.fi19frkgoe.wasm": "sha256-GZWoGwG5kqPZ3m+stwPru8VvvA8V99+H3up69gTk/qU=",
@@ -414,10 +416,10 @@
       "WindowsBase.vy2l5u79y6.wasm": "sha256-ufB9Mo5joMyUs3DzXWWBFFIZNEVrt6h9N5stYB6Oln4=",
       "mscorlib.xd6mv31d55.wasm": "sha256-1YSLR2eZt3ceALFV//vZUF2AloxVil3VlrW1zZYPSEI=",
       "netstandard.kaml52uspo.wasm": "sha256-HLEwBpLfzKw2/zGSVzHzFJxznCkt/WIjahrziiMrOpA=",
-      "Pitzam.5ds5xz1ybg.wasm": "sha256-JyRrFX9GxLOyPoNuGdBGy9uyOa8OC+B/g4/v3VWPEKw="
+      "Pitzam.67jlt77n0q.wasm": "sha256-cj0Kc24uXDN/2PgC38bgJakcS7YcDlcNs3+AhQUYK0w="
     },
     "pdb": {
-      "Pitzam.u2m0is4ti6.pdb": "sha256-xjG7UMBjsjJfeUbBz72FuDnmgJoEFik58KpQGTLwNyI="
+      "Pitzam.daokusqash.pdb": "sha256-C1qwORAzvXvHj0oKcnRxNzJGJJs9ElgyThfHRIck8W0="
     }
   },
   "cacheBootResources": true,

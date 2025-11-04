@@ -1,38 +1,55 @@
 /* Pages/Pizzas.razor.css */
 
 .pizza-image[b-g2l68eszh3] {
-    height: 220px;       /* Tüm resimlere sabit bir yükseklik */
-    object-fit: cover;  /* Resmin en-boy oranını koruyarak kutuya sığar */
+    height: 160px;
+    object-fit: cover;
 }
 
 .pizza-card[b-g2l68eszh3] {
     transition: transform .2s ease-in-out, box-shadow .2s ease-in-out;
     border: none;
-    border-radius: 0.75rem; /* Daha yumuşak kenarlar */
+    border-radius: 0.75rem;
+}
+
+.pizza-card .card-body[b-g2l68eszh3] {
+    padding: 0.75rem;
 }
 
 .pizza-card:hover[b-g2l68eszh3] {
-    transform: translateY(-5px); /* Kartın üzerine gelince hafifçe yükselmesi */
-    box-shadow: 0 .5rem 1.5rem rgba(0,0,0,.15)!important; /* Daha belirgin gölge */
+    transform: translateY(-5px);
+    box-shadow: 0 .5rem 1.5rem rgba(0,0,0,.15)!important;
 }
 
 .card-title[b-g2l68eszh3] {
     font-weight: 600;
+    font-size: 1rem;
+    margin-bottom: 0.25rem;
 }
 
-/* Malzeme listesi çok uzarsa 2 satırda keser ve "..." ekler */
 .ingredients-list[b-g2l68eszh3] {
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
-    min-height: 40px; /* 2 satırlık bir alan ayırır */
+    min-height: 34px;
+    font-size: 0.8rem;
+}
+
+.pizza-card .card-text.h5[b-g2l68eszh3] {
+    font-size: 1.1rem;
+    margin-top: 0.5rem !important;
+    margin-bottom: 0.75rem;
 }
 
 .btn-group .btn[b-g2l68eszh3] {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 6px; /* İkon ve yazı arasına boşluk */
+    gap: 4px;
+    font-size: 0.85rem;
 }
+
+/* BURADAN AŞAĞIDAKİ TÜM .filter-card, .filter-list VB. 
+   STİLLERİNİ SİLMİŞ OLMALISINIZ.
+*/

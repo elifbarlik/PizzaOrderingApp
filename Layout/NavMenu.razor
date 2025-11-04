@@ -14,7 +14,7 @@
         
         <div class="@NavMenuCssClass navbar-collapse" id="navbarNav">
             
-            @* Sola Hizalı Linkler (Menü, Siparişlerim, Profilim) *@
+            @* Sola Hizalı Linkler (Menü, Siparişlerim) *@
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
                     <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
@@ -27,24 +27,39 @@
                     </NavLink>
                 </li>
                 <li class="nav-item">
-                    <NavLink class="nav-link" href="/profile">
-                        <i class="bi bi-person-fill"></i> Profilim
-                    </NavLink>
-                </li>
-            </ul>
-            
-            @* Sağa Hizalı Link (Sepet) *@
-            <ul class="navbar-nav">
-                <li class="nav-item">
                     <NavLink class="nav-link" href="/checkout">
                         <i class="bi bi-cart-fill"></i> 
                         Sepetim
                         
                         @if(orderCount > 0)
                         {
-                             <span class="badge rounded-pill bg-light text-dark ms-1">@orderCount</span>
+                            <span class="badge rounded-pill bg-light text-dark ms-1">@orderCount</span>
                         }
                     </NavLink>
+                </li>
+            </ul>
+            
+            @* Sağa Hizalı Linkler (Sepet ve Profil) *@
+            <ul class="navbar-nav">
+                
+                
+                @* Yeni Profil Dropdown *@
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-person-circle">e</i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
+                        <li>
+                            <NavLink class="dropdown-item" href="/profile">
+                                <i class="bi bi-person-fill"></i> Profilim
+                            </NavLink>
+                        </li>
+                        <li>
+                            <NavLink class="dropdown-item" href="/settings"> @* Ayarlar için bir sayfa yolu varsayıldı *@
+                                <i class="bi bi-gear-fill"></i> Ayarlar
+                            </NavLink>
+                        </li>
+                    </ul>
                 </li>
             </ul>
         </div>
@@ -55,7 +70,6 @@
     private bool collapseNavMenu = true;
     private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
     private int orderCount = 0;
-
     private void ToggleNavMenu()
     {
         collapseNavMenu = !collapseNavMenu;
@@ -64,14 +78,14 @@
     protected override void OnInitialized()
     {
         OrderStateService.OnChange += UpdateOrderCount;
-        UpdateOrderCount(); 
+        UpdateOrderCount();
     }
 
     private void UpdateOrderCount()
     {
-        var cart = OrderStateService.GetCart(); 
-        orderCount = cart?.Count ?? 0; 
-        InvokeAsync(StateHasChanged); 
+        var cart = OrderStateService.GetCart();
+        orderCount = cart?.Count ?? 0;
+        InvokeAsync(StateHasChanged);
     }
 
     public void Dispose()
