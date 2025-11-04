@@ -1,0 +1,36 @@
+@using Pitzam.Models
+@code {
+    [Parameter] public EventCallback<Customer> OnSubmit { get; set; }
+    private Customer model = new();
+
+    private async Task HandleSubmit()
+    {
+        if (OnSubmit.HasDelegate)
+            await OnSubmit.InvokeAsync(model);
+    }
+}
+
+<EditForm Model="model" OnValidSubmit="HandleSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div>
+        <label>Ad Soyad:</label><br />
+        <InputText @bind-Value="model.FullName" />
+        <ValidationMessage For="@(() => model.FullName)" />
+    </div>
+
+    <div>
+        <label>E-posta:</label><br />
+        <InputText @bind-Value="model.Email" />
+        <ValidationMessage For="@(() => model.Email)" />
+    </div>
+
+    <div>
+        <label>Adres:</label><br />
+        <InputTextArea @bind-Value="model.Address" />
+        <ValidationMessage For="@(() => model.Address)" />
+    </div>
+
+    <button class="btn" type="submit">Siparişi Onayla</button>
+</EditForm>

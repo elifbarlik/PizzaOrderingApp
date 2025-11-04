@@ -1,0 +1,33 @@
+@page "/pizzas"
+@inject Pitzam.Services.PizzaService PizzaService
+
+<h3 class="text-center">🍕 Menü</h3>
+
+@if (pizzas == null)
+{
+    <p>Yükleniyor...</p>
+}
+else
+{
+    <div class="pizza-list">
+        @foreach (var pizza in pizzas)
+        {
+            <div class="pizza-card">
+                <img src="@pizza.ImageUrl" alt="@pizza.Name" width="160" />
+                <h4>@pizza.Name</h4>
+                <p>@string.Join(", ", pizza.Ingredients)</p>
+                <p><b>@pizza.BasePrice TL</b></p>
+                <a class="btn" href="/pizzas/@pizza.Id">Detay</a>
+            </div>
+        }
+    </div>
+}
+
+@code {
+    private List<Pitzam.Models.Pizza>? pizzas;
+
+    protected override async Task OnInitializedAsync()
+    {
+        pizzas = await PizzaService.GetPizzasAsync();
+    }
+}

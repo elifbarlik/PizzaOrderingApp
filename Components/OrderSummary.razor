@@ -1,0 +1,21 @@
+@using Pitzam.Models
+@code {
+    [Parameter] public Order Order { get; set; } = new();
+}
+
+<div class="order-summary">
+    <h4>📦 Sipariş Özeti</h4>
+    <p><b>Pizza:</b> @Order.PizzaName (@Order.Size)</p>
+
+    @if (Order.Extras?.Count > 0)
+    {
+        <p><b>Ek Malzemeler:</b> @string.Join(", ", Order.Extras)</p>
+    }
+
+    @if (Order.RemovedIngredients?.Count > 0)
+    {
+        <p><b>Çıkarılan Malzemeler:</b> @string.Join(", ", Order.RemovedIngredients)</p>
+    }
+
+    <p><b>Toplam:</b> @Order.TotalPrice TL</p>
+</div>

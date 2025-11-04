@@ -1,0 +1,33 @@
+@page "/pizzas/{id}"
+@inject Pitzam.Services.PizzaService PizzaService
+@inject Pitzam.Services.OrderStateService OrderStateService
+@inject NavigationManager Navigation
+@using Pitzam.Models
+
+<h3>@selectedPizza?.Name</h3>
+
+@if (selectedPizza == null)
+{
+    <p>Pizza bulunamadı.</p>
+}
+else
+{
+    <Pitzam.Components.PizzaCustomizer Pizza="selectedPizza" OnOrderReady="HandleOrderReady" />
+}
+
+@code {
+    [Parameter] public string? Id { get; set; }
+    private Pizza? selectedPizza;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var pizzas = await PizzaService.GetPizzasAsync();
+        selectedPizza = pizzas.FirstOrDefault(p => p.Id == Id);
+    }
+
+    private void HandleOrderReady(Order order)
+    {
+        OrderStateService.SetOrder(order);
+        Navigation.NavigateTo("/checkout");
+    }
+}
