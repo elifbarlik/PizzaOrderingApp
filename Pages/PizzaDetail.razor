@@ -4,6 +4,7 @@
 @inject NavigationManager Navigation
 @using Pitzam.Models
 
+@* ... (HTML kısmı aynı kalabilir) ... *@
 <h3>@selectedPizza?.Name</h3>
 
 @if (selectedPizza == null)
@@ -15,10 +16,11 @@ else
     <Pitzam.Components.PizzaCustomizer Pizza="selectedPizza" OnOrderReady="HandleOrderReady" />
 }
 
+
 @code {
     [Parameter] public string? Id { get; set; }
     private Pizza? selectedPizza;
-
+    
     protected override async Task OnInitializedAsync()
     {
         var pizzas = await PizzaService.GetPizzasAsync();
@@ -27,7 +29,11 @@ else
 
     private void HandleOrderReady(Order order)
     {
-        OrderStateService.SetOrder(order);
+        // ---- DEĞİŞİKLİK BURADA ----
+        // SetOrder (eski) yerine AddPizzaToCart (yeni) metodunu kullanıyoruz
+        OrderStateService.AddPizzaToCart(order); 
+        // ---- DEĞİŞİKLİK BİTTİ ----
+        
         Navigation.NavigateTo("/checkout");
     }
 }

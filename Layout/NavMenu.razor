@@ -1,29 +1,81 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="">Pitzam</a>
-        <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
+﻿@inject Pitzam.Services.OrderStateService OrderStateService
+@implements IDisposable
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm sticky-top">
+    <div class="container">
+        
+        <a class="navbar-brand" href="">
+            🍕 Pitzam
+        </a>
+
+        <button class="navbar-toggler" type="button" @onclick="ToggleNavMenu" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-    </div>
-</div>
-
-<div class="@NavMenuCssClass nav-scrollable" @onclick="ToggleNavMenu">
-    <nav class="nav flex-column">
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Pizzas
-            </NavLink>
+        
+        <div class="@NavMenuCssClass navbar-collapse" id="navbarNav">
+            
+            @* Sola Hizalı Linkler (Menü, Siparişlerim, Profilim) *@
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+                        <i class="bi bi-house-door-fill"></i> Menü
+                    </NavLink>
+                </li>
+                <li class="nav-item">
+                    <NavLink class="nav-link" href="/orders">
+                        <i class="bi bi-receipt"></i> Siparişlerim
+                    </NavLink>
+                </li>
+                <li class="nav-item">
+                    <NavLink class="nav-link" href="/profile">
+                        <i class="bi bi-person-fill"></i> Profilim
+                    </NavLink>
+                </li>
+            </ul>
+            
+            @* Sağa Hizalı Link (Sepet) *@
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <NavLink class="nav-link" href="/checkout">
+                        <i class="bi bi-cart-fill"></i> 
+                        Sepetim
+                        
+                        @if(orderCount > 0)
+                        {
+                             <span class="badge rounded-pill bg-light text-dark ms-1">@orderCount</span>
+                        }
+                    </NavLink>
+                </li>
+            </ul>
         </div>
-    </nav>
-</div>
+    </div>
+</nav>
 
 @code {
     private bool collapseNavMenu = true;
-
     private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+    private int orderCount = 0;
 
     private void ToggleNavMenu()
     {
         collapseNavMenu = !collapseNavMenu;
+    }
+
+    protected override void OnInitialized()
+    {
+        OrderStateService.OnChange += UpdateOrderCount;
+        UpdateOrderCount(); 
+    }
+
+    private void UpdateOrderCount()
+    {
+        var cart = OrderStateService.GetCart(); 
+        orderCount = cart?.Count ?? 0; 
+        InvokeAsync(StateHasChanged); 
+    }
+
+    public void Dispose()
+    {
+        OrderStateService.OnChange -= UpdateOrderCount;
     }
 }

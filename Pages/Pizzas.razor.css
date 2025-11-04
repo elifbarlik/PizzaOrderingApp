@@ -1,0 +1,38 @@
+/* Pages/Pizzas.razor.css */
+
+.pizza-image {
+    height: 220px;       /* Tüm resimlere sabit bir yükseklik */
+    object-fit: cover;  /* Resmin en-boy oranını koruyarak kutuya sığar */
+}
+
+.pizza-card {
+    transition: transform .2s ease-in-out, box-shadow .2s ease-in-out;
+    border: none;
+    border-radius: 0.75rem; /* Daha yumuşak kenarlar */
+}
+
+.pizza-card:hover {
+    transform: translateY(-5px); /* Kartın üzerine gelince hafifçe yükselmesi */
+    box-shadow: 0 .5rem 1.5rem rgba(0,0,0,.15)!important; /* Daha belirgin gölge */
+}
+
+.card-title {
+    font-weight: 600;
+}
+
+/* Malzeme listesi çok uzarsa 2 satırda keser ve "..." ekler */
+.ingredients-list {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-height: 40px; /* 2 satırlık bir alan ayırır */
+}
+
+.btn-group .btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px; /* İkon ve yazı arasına boşluk */
+}

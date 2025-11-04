@@ -3,7 +3,7 @@
     "id": "1",
     "name": "Margherita",
     "basePrice": 120,
-    "imageUrl": "images/margherita.jpeg",
+    "imageUrl": "../images/pizza.jpg",
     "ingredients": ["Mozzarella", "Domates Sosu", "Fesleğen"],
     "sizes": [
       { "id": "s1", "name": "Küçük", "multiplier": 1.0 },
@@ -15,7 +15,7 @@
     "id": "2",
     "name": "Pepperoni",
     "basePrice": 140,
-    "imageUrl": "images/margherita.jpeg",
+    "imageUrl": "../images/pizza.jpg",
     "ingredients": ["Mozzarella", "Domates Sosu", "Pepperoni"],
     "sizes": [
       { "id": "s1", "name": "Küçük", "multiplier": 1.0 },
@@ -27,7 +27,7 @@
     "id": "3",
     "name": "Vejetaryen",
     "basePrice": 130,
-    "imageUrl": "images/margherita.jpeg",
+    "imageUrl": "../images/pizza.jpg",
     "ingredients": ["Mozzarella", "Domates Sosu", "Biber", "Mantar", "Zeytin"],
     "sizes": [
       { "id": "s1", "name": "Küçük", "multiplier": 1.0 },
@@ -39,7 +39,7 @@
     "id": "4",
     "name": "Sucuklu",
     "basePrice": 150,
-    "imageUrl": "images/margherita.jpeg",
+    "imageUrl": "../images/pizza.jpg",
     "ingredients": ["Mozzarella", "Domates Sosu", "Sucuk"],
     "sizes": [
       { "id": "s1", "name": "Küçük", "multiplier": 1.0 },
@@ -51,7 +51,7 @@
     "id": "5",
     "name": "Tavuklu BBQ",
     "basePrice": 155,
-    "imageUrl": "images/margherita.jpeg",
+    "imageUrl": "../images/pizza.jpg",
     "ingredients": ["Mozzarella", "BBQ Sosu", "Tavuk", "Soğan"],
     "sizes": [
       { "id": "s1", "name": "Küçük", "multiplier": 1.0 },
@@ -63,7 +63,7 @@
     "id": "6",
     "name": "Dört Peynirli",
     "basePrice": 160,
-    "imageUrl": "images/margherita.jpeg",
+    "imageUrl": "../images/pizza.jpg",
     "ingredients": ["Mozzarella", "Cheddar", "Parmesan", "Beyaz Peynir"],
     "sizes": [
       { "id": "s1", "name": "Küçük", "multiplier": 1.0 },
@@ -75,7 +75,7 @@
     "id": "7",
     "name": "Ton Balıklı",
     "basePrice": 150,
-    "imageUrl": "images/margherita.jpeg",
+    "imageUrl": "../images/pizza.jpg",
     "ingredients": ["Mozzarella", "Ton Balığı", "Zeytin", "Mısır"],
     "sizes": [
       { "id": "s1", "name": "Küçük", "multiplier": 1.0 },
@@ -87,7 +87,7 @@
     "id": "8",
     "name": "Kavurmalı",
     "basePrice": 170,
-    "imageUrl": "images/margherita.jpeg",
+    "imageUrl": "../images/pizza.jpg",
     "ingredients": ["Mozzarella", "Domates Sosu", "Kavurma", "Soğan"],
     "sizes": [
       { "id": "s1", "name": "Küçük", "multiplier": 1.0 },
@@ -99,7 +99,7 @@
     "id": "9",
     "name": "Deniz Mahsullü",
     "basePrice": 180,
-    "imageUrl": "images/margherita.jpeg",
+    "imageUrl": "../images/pizza.jpg",
     "ingredients": ["Mozzarella", "Karides", "Kalamar", "Sarımsak"],
     "sizes": [
       { "id": "s1", "name": "Küçük", "multiplier": 1.0 },
@@ -111,7 +111,7 @@
     "id": "10",
     "name": "Meksika",
     "basePrice": 165,
-    "imageUrl": "images/margherita.jpeg",
+    "imageUrl": "../images/pizza.jpg",
     "ingredients": ["Mozzarella", "Jalapeno", "Mısır", "Kırmızı Biber"],
     "sizes": [
       { "id": "s1", "name": "Küçük", "multiplier": 1.0 },

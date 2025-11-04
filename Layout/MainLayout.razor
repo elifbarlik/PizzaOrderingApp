@@ -1,12 +1,30 @@
 ﻿@inherits LayoutComponentBase
-<div class="page">
-    <main>
-        <div class="top-row px-4">
-            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
-        </div>
 
-        <article class="content px-4">
+@* Bu div, tüm sayfanın dikey olarak esnemesini ve 
+  footer'ın her zaman en altta kalmasını sağlar.
+*@
+<div class="page d-flex flex-column min-vh-100">
+    
+    @* Navbar'ı (üst menü) buraya yerleştiriyoruz *@
+    <header>
+        <NavMenu />
+    </header>
+
+    @* Sayfa içeriği (@Body) burada gösterilecek.
+      flex-grow-1, bu alanın mevcut tüm boş alanı doldurmasını sağlar.
+    *@
+    <main class="flex-grow-1">
+        
+        @* container ve px/py-4, içeriğinize
+          güzel bir dolgu (padding) ve kenar boşluğu verir.
+        *@
+        <article class="content container-fluid px-4 py-4">
             @Body
         </article>
     </main>
+
+    @* Sayfanın en altına sabit bir footer ekliyoruz *@
+    <footer class="bg-dark text-white text-center p-3 mt-auto">
+        Pitzam &copy; @DateTime.Now.Year - Tüm Hakları Saklıdır.
+    </footer>
 </div>

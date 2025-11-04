@@ -4,16 +4,40 @@ namespace Pitzam.Services
 {
     public class OrderStateService
     {
-        public Order CurrentOrder { get; private set; } = new();
+        // Diğer bileşenlerin "dinleyebilmesi" için bir event
+        public event Action? OnChange;
 
-        public void SetOrder(Order order)
+        // ARTIK BİR LİSTE TUTUYORUZ (SEPETİMİZ BU)
+        public List<Order> CurrentPizzasInCart { get; private set; } = new();
+
+        // İsmi "AddPizzaToCart" olarak değiştirdik ve listeye ekliyoruz
+        public void AddPizzaToCart(Order pizzaOrder)
         {
-            CurrentOrder = order;
+            CurrentPizzasInCart.Add(pizzaOrder);
+            
+            // Sepet değişti! Event'i tetikle.
+            NotifyStateChanged();
         }
 
-        public void ClearOrder()
+        // İsmi "ClearCart" olarak değiştirdik ve listeyi temizliyoruz
+        public void ClearCart()
         {
-            CurrentOrder = new();
+            CurrentPizzasInCart = new();
+            
+            // Sepet temizlendi! Event'i tetikle.
+            NotifyStateChanged();
+        }
+
+        // Bu metot artık sepetin tamamını (pizzaların listesini) döndürür
+        public List<Order> GetCart()
+        {
+            return CurrentPizzasInCart;
+        }
+
+        // OnChange event'ini çağıran yardımcı metot
+        private void NotifyStateChanged()
+        {
+            OnChange?.Invoke();
         }
     }
 }
