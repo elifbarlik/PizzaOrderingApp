@@ -1,0 +1,377 @@
+@page "/profile"
+@using Pitzam.Models
+@inject Pitzam.Services.AuthService Auth
+@implements IDisposable
+
+<div class="container py-4">
+    <h2 class="mb-4">👤 Profilim</h2>
+
+    @if (!isAuthenticated)
+    {
+        <div class="alert alert-warning">Profil bilgilerinizi görüntülemek için giriş yapın.</div>
+        <a class="btn btn-primary" href="/login">Giriş Yap</a>
+    }
+    else
+    {
+        @if (!string.IsNullOrEmpty(message))
+        {
+            <div class="alert @messageCss">@message</div>
+        }
+
+        <EditForm Model="editUser" OnValidSubmit="SaveProfile">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+
+            <div class="row g-3">
+                <div class="col-12 col-md-6">
+                    <label class="form-label">Ad Soyad</label>
+                    <InputText class="form-control" @bind-Value="editUser.FullName" />
+                    <ValidationMessage For="@(() => editUser.FullName)" />
+                </div>
+                <div class="col-12 col-md-6">
+                    <label class="form-label">E-posta</label>
+                    <InputText class="form-control" @bind-Value="editUser.Email" />
+                    <ValidationMessage For="@(() => editUser.Email)" />
+                </div>
+                <div class="col-12 col-md-6">
+                    <label class="form-label">Telefon</label>
+                    <InputText class="form-control" @bind-Value="editUser.Phone" />
+                </div>
+                <div class="col-12">
+                    <label class="form-label">Adres</label>
+                    <InputTextArea class="form-control" rows="3" @bind-Value="editUser.Address" />
+                </div>
+            </div>
+
+            <div class="mt-3 d-flex gap-2">
+                <button class="btn btn-primary" type="submit">Kaydet</button>
+                <a class="btn btn-outline-secondary" href="/">İptal</a>
+            </div>
+        </EditForm>
+
+        <hr class="my-4" />
+
+        <h4 class="mb-3">📍 Kayıtlı Adreslerim</h4>
+        @if (editUser.SavedAddresses == null || editUser.SavedAddresses.Count == 0)
+        {
+            <div class="alert alert-info">Kayıtlı adresiniz bulunmuyor.</div>
+        }
+        else
+        {
+            <div class="list-group mb-3">
+                @for (int i = 0; i < editUser.SavedAddresses.Count; i++)
+                {
+                    var a = editUser.SavedAddresses[i];
+                    <div class="list-group-item">
+                        @if (editingAddressIndex == i)
+                        {
+                            <div class="row g-2">
+                                <div class="col-12 col-md-4">
+                                    <label class="form-label">Ad Soyad</label>
+                                    <input class="form-control" @bind="a.FullName" />
+                                </div>
+                                <div class="col-12 col-md-4">
+                                    <label class="form-label">Telefon</label>
+                                    <input class="form-control" @bind="a.Phone" />
+                                </div>
+                                <div class="col-12 col-md-4">
+                                    <label class="form-label">E-posta</label>
+                                    <input class="form-control" @bind="a.Email" />
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label">Adres</label>
+                                    <textarea class="form-control" rows="2" @bind="a.Address"></textarea>
+                                </div>
+                            </div>
+                            <div class="mt-2 d-flex gap-2">
+                                <button class="btn btn-sm btn-success" @onclick="(() => SaveAddress(i))">Kaydet</button>
+                                <button class="btn btn-sm btn-secondary" @onclick="CancelEditAddress">İptal</button>
+                                <button class="btn btn-sm btn-outline-danger ms-auto" @onclick="(() => DeleteAddress(i))">Sil</button>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center">
+                                <div>
+                                    <div class="fw-semibold">@a.FullName</div>
+                                    <div class="text-muted small">@a.Address</div>
+                                    <div class="text-muted small">@a.Phone • @a.Email</div>
+                                </div>
+                                <div class="mt-2 mt-md-0 d-flex gap-2">
+                                    <button class="btn btn-sm btn-outline-primary" @onclick="(() => EditAddress(i))">Düzenle</button>
+                                    <button class="btn btn-sm btn-outline-danger" @onclick="(() => DeleteAddress(i))">Sil</button>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+            </div>
+        }
+        <div class="card mb-4">
+            <div class="card-body">
+                <h6 class="card-title mb-3">Yeni Adres Ekle</h6>
+                <div class="row g-2">
+                    <div class="col-12 col-md-4"><input class="form-control" placeholder="Ad Soyad" @bind="newAddress.FullName" /></div>
+                    <div class="col-12 col-md-4"><input class="form-control" placeholder="Telefon" @bind="newAddress.Phone" /></div>
+                    <div class="col-12 col-md-4"><input class="form-control" placeholder="E-posta" @bind="newAddress.Email" /></div>
+                    <div class="col-12"><textarea class="form-control" rows="2" placeholder="Adres" @bind="newAddress.Address"></textarea></div>
+                </div>
+                <div class="mt-2">
+                    <button class="btn btn-sm btn-primary" @onclick="AddAddress">Ekle</button>
+                </div>
+            </div>
+        </div>
+
+        <h4 class="mb-3">💳 Kayıtlı Kartlarım</h4>
+        @if (editUser.SavedCards == null || editUser.SavedCards.Count == 0)
+        {
+            <div class="alert alert-info">Kayıtlı kartınız bulunmuyor.</div>
+        }
+        else
+        {
+            <div class="list-group mb-3">
+                @for (int i = 0; i < editUser.SavedCards.Count; i++)
+                {
+                    var c = editUser.SavedCards[i];
+                    <div class="list-group-item">
+                        @if (editingCardIndex == i)
+                        {
+                            <div class="row g-2">
+                                <div class="col-12 col-md-4"><input class="form-control" placeholder="Kart Sahibi" @bind="c.Cardholder" /></div>
+                                <div class="col-6 col-md-3"><input class="form-control" placeholder="AA/YY" @bind="c.Expiry" /></div>
+                                <div class="col-6 col-md-3"><input class="form-control" placeholder="Marka" @bind="c.Brand" /></div>
+                                <div class="col-12 col-md-2"><input class="form-control" placeholder="Son 4" @bind="c.Last4" maxlength="4" /></div>
+                            </div>
+                            <div class="mt-2 d-flex gap-2">
+                                <button class="btn btn-sm btn-success" @onclick="(() => SaveCard(i))">Kaydet</button>
+                                <button class="btn btn-sm btn-secondary" @onclick="CancelEditCard">İptal</button>
+                                <button class="btn btn-sm btn-outline-danger ms-auto" @onclick="(() => DeleteCard(i))">Sil</button>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center">
+                                <div>
+                                    <div class="fw-semibold">@c.Brand •••• @c.Last4</div>
+                                    <div class="text-muted small">@c.Cardholder • Son Kullanma: @c.Expiry</div>
+                                </div>
+                                <div class="mt-2 mt-md-0 d-flex gap-2">
+                                    <button class="btn btn-sm btn-outline-primary" @onclick="(() => EditCard(i))">Düzenle</button>
+                                    <button class="btn btn-sm btn-outline-danger" @onclick="(() => DeleteCard(i))">Sil</button>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+            </div>
+        }
+        <div class="card">
+            <div class="card-body">
+                <h6 class="card-title mb-3">Yeni Kart Ekle</h6>
+                <div class="row g-2">
+                    <div class="col-12 col-md-4"><input class="form-control" placeholder="Kart Sahibi" @bind="newCard.Cardholder" /></div>
+                    <div class="col-6 col-md-3"><input class="form-control" placeholder="AA/YY" @bind="newCard.Expiry" /></div>
+                    <div class="col-6 col-md-3"><input class="form-control" placeholder="Marka" @bind="newCard.Brand" /></div>
+                    <div class="col-12 col-md-2"><input class="form-control" placeholder="Son 4" @bind="newCard.Last4" maxlength="4" /></div>
+                </div>
+                <div class="mt-2">
+                    <button class="btn btn-sm btn-primary" @onclick="AddCard">Ekle</button>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    private User editUser = new();
+    private bool isAuthenticated;
+    private string? message;
+    private string messageCss = "alert-success";
+    private int? editingAddressIndex;
+    private int? editingCardIndex;
+    private Customer newAddress = new();
+    private SavedCard newCard = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Auth.LoadCurrentUserAsync();
+        isAuthenticated = Auth.IsAuthenticated;
+        if (isAuthenticated && Auth.CurrentUser != null)
+        {
+            // Form için kopya oluştur
+            editUser = new User
+            {
+                Id = Auth.CurrentUser.Id,
+                FullName = Auth.CurrentUser.FullName,
+                Email = Auth.CurrentUser.Email,
+                Phone = Auth.CurrentUser.Phone,
+                Address = Auth.CurrentUser.Address,
+                CreatedAt = Auth.CurrentUser.CreatedAt,
+                Password = string.Empty,
+                SavedAddresses = Auth.CurrentUser.SavedAddresses ?? new List<Customer>(),
+                SavedCards = Auth.CurrentUser.SavedCards ?? new List<SavedCard>()
+            };
+        }
+        // Giriş/çıkış değişimlerini dinle
+        Auth.OnAuthStateChanged += HandleAuthChanged;
+    }
+
+    private async Task SaveProfile()
+    {
+        var ok = await Auth.UpdateUserAsync(editUser);
+        if (ok)
+        {
+            messageCss = "alert-success";
+            message = "Profil güncellendi.";
+        }
+        else
+        {
+            messageCss = "alert-danger";
+            message = "Profil güncellenemedi.";
+        }
+    }
+
+    private void EditAddress(int index)
+    {
+        editingAddressIndex = index;
+    }
+
+    private async Task SaveAddress(int index)
+    {
+        await SaveProfile();
+        editingAddressIndex = null;
+        StateHasChanged();
+    }
+
+    private void CancelEditAddress()
+    {
+        editingAddressIndex = null;
+        // Mevcut user'ı yeniden yükleyerek değişiklikleri geri al
+        InvokeAsync(async () =>
+        {
+            await Auth.LoadCurrentUserAsync();
+            if (Auth.CurrentUser != null)
+            {
+                editUser.SavedAddresses = Auth.CurrentUser.SavedAddresses ?? new List<Customer>();
+            }
+            StateHasChanged();
+        });
+    }
+
+    private async Task AddAddress()
+    {
+        if (string.IsNullOrWhiteSpace(newAddress.FullName) || string.IsNullOrWhiteSpace(newAddress.Address))
+            return;
+        editUser.SavedAddresses ??= new List<Customer>();
+        editUser.SavedAddresses.Add(new Customer
+        {
+            FullName = newAddress.FullName,
+            Email = newAddress.Email,
+            Phone = newAddress.Phone,
+            Address = newAddress.Address
+        });
+        newAddress = new Customer();
+        await SaveProfile();
+    }
+
+    private async Task DeleteAddress(int index)
+    {
+        if (index >= 0 && index < (editUser.SavedAddresses?.Count ?? 0))
+        {
+            editUser.SavedAddresses.RemoveAt(index);
+            await SaveProfile();
+        }
+    }
+
+    private void EditCard(int index)
+    {
+        editingCardIndex = index;
+    }
+
+    private async Task SaveCard(int index)
+    {
+        // Last4 alanı 4 haneli olmalı
+        var card = editUser.SavedCards[index];
+        card.Last4 = new string((card.Last4 ?? string.Empty).Where(char.IsDigit).ToArray());
+        if (card.Last4.Length > 4) card.Last4 = card.Last4[^4..];
+        await SaveProfile();
+        editingCardIndex = null;
+        StateHasChanged();
+    }
+
+    private void CancelEditCard()
+    {
+        editingCardIndex = null;
+        // değişiklikleri geri al
+        InvokeAsync(async () =>
+        {
+            await Auth.LoadCurrentUserAsync();
+            if (Auth.CurrentUser != null)
+            {
+                editUser.SavedCards = Auth.CurrentUser.SavedCards ?? new List<SavedCard>();
+            }
+            StateHasChanged();
+        });
+    }
+
+    private async Task AddCard()
+    {
+        // last4 ve expiry basit kontroller
+        var digits = new string((newCard.Last4 ?? string.Empty).Where(char.IsDigit).ToArray());
+        if (digits.Length != 4) return;
+        if (string.IsNullOrWhiteSpace(newCard.Cardholder)) return;
+        if (string.IsNullOrWhiteSpace(newCard.Expiry)) return;
+
+        editUser.SavedCards ??= new List<SavedCard>();
+        editUser.SavedCards.Add(new SavedCard
+        {
+            Cardholder = newCard.Cardholder,
+            Brand = string.IsNullOrWhiteSpace(newCard.Brand) ? "Card" : newCard.Brand,
+            Last4 = digits,
+            Expiry = newCard.Expiry
+        });
+        newCard = new SavedCard();
+        await SaveProfile();
+    }
+
+    private async Task DeleteCard(int index)
+    {
+        if (index >= 0 && index < (editUser.SavedCards?.Count ?? 0))
+        {
+            editUser.SavedCards.RemoveAt(index);
+            await SaveProfile();
+        }
+    }
+
+    private async void HandleAuthChanged()
+    {
+        isAuthenticated = Auth.IsAuthenticated;
+        if (isAuthenticated && Auth.CurrentUser != null)
+        {
+            editUser = new User
+            {
+                Id = Auth.CurrentUser.Id,
+                FullName = Auth.CurrentUser.FullName,
+                Email = Auth.CurrentUser.Email,
+                Phone = Auth.CurrentUser.Phone,
+                Address = Auth.CurrentUser.Address,
+                CreatedAt = Auth.CurrentUser.CreatedAt,
+                Password = string.Empty,
+                SavedAddresses = Auth.CurrentUser.SavedAddresses ?? new List<Customer>(),
+                SavedCards = Auth.CurrentUser.SavedCards ?? new List<SavedCard>()
+            };
+        }
+        else
+        {
+            editUser = new User();
+        }
+        await InvokeAsync(StateHasChanged);
+    }
+
+    public void Dispose()
+    {
+        Auth.OnAuthStateChanged -= HandleAuthChanged;
+    }
+}
+
+

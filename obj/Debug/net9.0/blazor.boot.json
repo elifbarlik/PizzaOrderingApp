@@ -1,7 +1,7 @@
 {
   "mainAssemblyName": "Pitzam",
   "resources": {
-    "hash": "sha256-KiNKgXuP9/bamw+VAHphyESlBiNqXo1iBS1JbCD3Qvk=",
+    "hash": "sha256-bA60smih/3xvjzletCGUTnm4X8kQLG0WQNSRMfos6jQ=",
     "fingerprinting": {
       "Blazored.LocalStorage.12n6dz54qr.wasm": "Blazored.LocalStorage.wasm",
       "Microsoft.AspNetCore.Authorization.z6jo10m0rd.wasm": "Microsoft.AspNetCore.Authorization.wasm",
@@ -203,8 +203,8 @@
       "icudt_CJK.tjcz0u77k5.dat": "icudt_CJK.dat",
       "icudt_EFIGS.tptq2av103.dat": "icudt_EFIGS.dat",
       "icudt_no_CJK.lfu7j35m59.dat": "icudt_no_CJK.dat",
-      "Pitzam.67jlt77n0q.wasm": "Pitzam.wasm",
-      "Pitzam.daokusqash.pdb": "Pitzam.pdb"
+      "Pitzam.dop4gf02f4.wasm": "Pitzam.wasm",
+      "Pitzam.kyutowmey8.pdb": "Pitzam.pdb"
     },
     "jsModuleNative": {
       "dotnet.native.9ih887ebfz.js": "sha256-oS7IRiQoVt9ThQ7Y2UM3XoeY0JqPD02cg9IvRdufn2w="
@@ -416,10 +416,10 @@
       "WindowsBase.vy2l5u79y6.wasm": "sha256-ufB9Mo5joMyUs3DzXWWBFFIZNEVrt6h9N5stYB6Oln4=",
       "mscorlib.xd6mv31d55.wasm": "sha256-1YSLR2eZt3ceALFV//vZUF2AloxVil3VlrW1zZYPSEI=",
       "netstandard.kaml52uspo.wasm": "sha256-HLEwBpLfzKw2/zGSVzHzFJxznCkt/WIjahrziiMrOpA=",
-      "Pitzam.67jlt77n0q.wasm": "sha256-cj0Kc24uXDN/2PgC38bgJakcS7YcDlcNs3+AhQUYK0w="
+      "Pitzam.dop4gf02f4.wasm": "sha256-A3mnBKYbFQ658y4cHG36nbdKqYs08gczo0v8M52CIDo="
     },
     "pdb": {
-      "Pitzam.daokusqash.pdb": "sha256-C1qwORAzvXvHj0oKcnRxNzJGJJs9ElgyThfHRIck8W0="
+      "Pitzam.kyutowmey8.pdb": "sha256-/LnFzqMl6aB73JLGYpXtY20VA7RGgMA39GQy7rUb+xI="
     }
   },
   "cacheBootResources": true,

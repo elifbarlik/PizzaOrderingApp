@@ -1,5 +1,18 @@
+:root {
+    --color-bg: #f8fafc; /* slate-50 */
+    --color-surface-1: #ffffff;
+    --color-surface-2: #f1f5f9; /* slate-100 */
+    --color-text: #111827; /* gray-900 */
+    --color-text-muted: #6b7280; /* gray-500 */
+    --color-border: rgba(0, 0, 0, 0.08);
+    --color-primary: #4f46e5; /* indigo-600 */
+    --color-primary-hover: #4338ca; /* indigo-700 */
+}
+
 html, body {
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-family: 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    background-color: var(--color-bg);
+    color: var(--color-text);
 }
 
 h1:focus {
@@ -7,17 +20,22 @@ h1:focus {
 }
 
 a, .btn-link {
-    color: #0071c1;
+    color: var(--color-primary);
 }
 
 .btn-primary {
     color: #fff;
-    background-color: #1b6ec2;
-    border-color: #1861ac;
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+}
+
+.btn-primary:hover {
+    background-color: var(--color-primary-hover);
+    border-color: var(--color-primary-hover);
 }
 
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+  box-shadow: 0 0 0 0.1rem rgba(99,102,241,0.15), 0 0 0 0.25rem rgba(79,70,229,0.35);
 }
 
 .content {
@@ -33,7 +51,7 @@ a, .btn-link {
 }
 
 .validation-message {
-    color: red;
+    color: #dc2626; /* red-600 */
 }
 
 #blazor-error-ui {
@@ -105,10 +123,58 @@ code {
 }
 
 .form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
-    color: var(--bs-secondary-color);
+    color: var(--color-text-muted);
     text-align: end;
 }
 
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
     text-align: start;
+}
+
+/* Light surfaces */
+.card {
+    background-color: var(--color-surface-1);
+    border: 1px solid var(--color-border);
+    color: var(--color-text);
+    border-radius: 12px;
+}
+
+.list-group-item {
+    background-color: var(--color-surface-1);
+    border-color: var(--color-border);
+    color: var(--color-text);
+}
+
+.alert {
+    background-color: var(--color-surface-2);
+    border-color: var(--color-border);
+    color: var(--color-text);
+}
+
+.form-control, .form-select, .form-check-input, textarea, input[type="text"], input[type="password"], input[type="email"], input[type="tel"] {
+    background-color: var(--color-surface-1);
+    color: var(--color-text);
+    border: 1px solid var(--color-border);
+}
+
+.form-control::placeholder, .form-select::placeholder, textarea::placeholder {
+    color: var(--color-text-muted);
+}
+
+/* Navbar same as body (light) */
+.navbar, .navbar.bg-dark, .navbar-dark {
+    background-color: var(--color-bg) !important;
+}
+
+.navbar .nav-link, .navbar .navbar-brand, .navbar .dropdown-item {
+    color: var(--color-text) !important;
+}
+
+.dropdown-menu {
+    background-color: var(--color-surface-1);
+    border: 1px solid var(--color-border);
+}
+
+.dropdown-item:hover {
+    background-color: var(--color-surface-2);
 }

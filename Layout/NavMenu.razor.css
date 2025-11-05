@@ -1,5 +1,5 @@
 .navbar {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
 }
 .navbar-brand {
     font-weight: 600;
@@ -9,17 +9,17 @@
 /* Aktif olan (seçili) linki daha belirgin yapar */
 .nav-link.active {
     font-weight: 500;
-    color: #fff !important;
+    color: #111 !important;
 }
 
 /* Normal linklerin rengini biraz soluklaştırır */
 .nav-link {
-    color: rgba(255,255,255,.7) !important;
+    color: rgba(0,0,0,.7) !important;
 }
 
 /* Linklerin üzerine gelince rengini parlatır */
 .nav-link:hover {
-    color: rgba(255,255,255,.9) !important;
+    color: rgba(0,0,0,.85) !important;
 }
 
 /* Bootstrap ikonlarını linklerdeki yazı ile hizalar */
@@ -64,6 +64,6 @@
 
     /* Hover ile açıldığında avatar linkinin de aktif görünmesini sağlar */
     .dropdown:hover .nav-link.dropdown-toggle {
-         color: rgba(255,255,255,.9) !important;
+         color: rgba(0,0,0,.85) !important;
     }
 }

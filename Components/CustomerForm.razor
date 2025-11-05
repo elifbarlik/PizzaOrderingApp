@@ -14,23 +14,29 @@
     <DataAnnotationsValidator />
     <ValidationSummary />
 
-    <div>
-        <label>Ad Soyad:</label><br />
-        <InputText @bind-Value="model.FullName" />
+    <div class="mb-3">
+        <label class="form-label">Ad Soyad</label>
+        <InputText class="form-control" @bind-Value="model.FullName" />
         <ValidationMessage For="@(() => model.FullName)" />
     </div>
 
-    <div>
-        <label>E-posta:</label><br />
-        <InputText @bind-Value="model.Email" />
+    <div class="mb-3">
+        <label class="form-label">E-posta</label>
+        <InputText class="form-control" @bind-Value="model.Email" />
         <ValidationMessage For="@(() => model.Email)" />
     </div>
 
-    <div>
-        <label>Adres:</label><br />
-        <InputTextArea @bind-Value="model.Address" />
+    <div class="mb-3">
+        <label class="form-label">Telefon</label>
+        <InputText class="form-control" @bind-Value="model.Phone" />
+        <ValidationMessage For="@(() => model.Phone)" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Adres</label>
+        <InputTextArea class="form-control" @bind-Value="model.Address" />
         <ValidationMessage For="@(() => model.Address)" />
     </div>
 
-    <button class="btn" type="submit">Siparişi Onayla</button>
+    <button class="btn" style="background-color:#6f42c1;border-color:#6f42c1;color:#fff" type="submit">Ödemeye Geç</button>
 </EditForm>

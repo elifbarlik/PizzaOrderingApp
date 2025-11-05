@@ -1,0 +1,130 @@
+@page "/signup"
+@using Pitzam.Models
+@using Pitzam.Services
+@using Microsoft.AspNetCore.Components.Forms
+@inject AuthService AuthService
+@inject NavigationManager Nav
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+            <div class="card shadow-sm">
+                <div class="card-body p-4">
+                    <h2 class="card-title text-center mb-4">📝 Kayıt Ol</h2>
+                    
+                    @if (!string.IsNullOrEmpty(errorMessage))
+                    {
+                        <div class="alert alert-danger" role="alert">
+                            @errorMessage
+                        </div>
+                    }
+                    
+                    @if (!string.IsNullOrEmpty(successMessage))
+                    {
+                        <div class="alert alert-success" role="alert">
+                            @successMessage
+                        </div>
+                    }
+
+                    <EditForm Model="@user" OnValidSubmit="HandleSignup">
+                        <DataAnnotationsValidator />
+                        
+                        <div class="mb-3">
+                            <label for="fullName" class="form-label">Ad Soyad</label>
+                            <InputText id="fullName" class="form-control" @bind-Value="user.FullName" placeholder="Adınız Soyadınız" />
+                            <ValidationMessage For="@(() => user.FullName)" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="email" class="form-label">E-posta</label>
+                            <InputText id="email" type="email" class="form-control" @bind-Value="user.Email" placeholder="ornek@email.com" />
+                            <ValidationMessage For="@(() => user.Email)" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Şifre</label>
+                            <InputText id="password" type="password" class="form-control" @bind-Value="user.Password" placeholder="En az 6 karakter" />
+                            <ValidationMessage For="@(() => user.Password)" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="phone" class="form-label">Telefon <span class="text-muted">(Opsiyonel)</span></label>
+                            <InputText id="phone" class="form-control" @bind-Value="user.Phone" placeholder="05XX XXX XX XX" />
+                            <ValidationMessage For="@(() => user.Phone)" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="address" class="form-label">Adres <span class="text-muted">(Opsiyonel)</span></label>
+                            <InputTextArea id="address" class="form-control" @bind-Value="user.Address" placeholder="Adres bilgisi" rows="3" />
+                            <ValidationMessage For="@(() => user.Address)" />
+                        </div>
+
+                        <div class="d-grid mb-3">
+                            <button type="submit" class="btn btn-primary" disabled="@isLoading">
+                                @if (isLoading)
+                                {
+                                    <span class="spinner-border spinner-border-sm me-2" role="status"></span>
+                                }
+                                Kayıt Ol
+                            </button>
+                        </div>
+                    </EditForm>
+
+                    <div class="text-center">
+                        <p class="mb-0">Zaten hesabınız var mı? <a href="/login">Giriş Yap</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private User user = new();
+    private string? errorMessage;
+    private string? successMessage;
+    private bool isLoading = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await AuthService.LoadCurrentUserAsync();
+        
+        // Eğer zaten giriş yapmışsa ana sayfaya yönlendir
+        if (AuthService.IsAuthenticated)
+        {
+            Nav.NavigateTo("/");
+        }
+    }
+
+    private async Task HandleSignup()
+    {
+        isLoading = true;
+        errorMessage = null;
+        successMessage = null;
+        
+        try
+        {
+            var result = await AuthService.RegisterAsync(user);
+            
+            if (result.Success)
+            {
+                successMessage = result.Message;
+                await Task.Delay(1000);
+                Nav.NavigateTo("/login");
+            }
+            else
+            {
+                errorMessage = result.Message;
+            }
+        }
+        catch (Exception ex)
+        {
+            errorMessage = "Bir hata oluştu: " + ex.Message;
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+}
+

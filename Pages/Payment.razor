@@ -1,0 +1,289 @@
+@page "/payment"
+@using Pitzam.Models
+@using System.Linq
+@inject Pitzam.Services.OrderStateService OrderState
+@inject Pitzam.Services.AuthService Auth
+@inject NavigationManager Nav
+
+<div class="container py-4">
+    <h2 class="mb-4">💳 Ödeme</h2>
+
+    @if (cart == null || cart.Count == 0)
+    {
+        <div class="alert alert-info">Sepetiniz boş. Ödeme için önce ürün ekleyin.</div>
+        <a class="btn btn-primary" href="/checkout">Sepete Dön</a>
+    }
+    else
+    {
+        <div class="row g-4">
+            <div class="col-12 col-lg-7">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-white">
+                        <strong>Sipariş Özeti</strong>
+                    </div>
+                    <div class="card-body">
+                        @foreach (var g in groupedCart)
+                        {
+                            <div class="d-flex justify-content-between align-items-center py-2 border-bottom">
+                                <div class="d-flex align-items-center gap-3">
+                                    <img src="@g.ImageUrl" alt="@g.Name" style="width:48px;height:48px;object-fit:cover;border-radius:8px;" />
+                                    <div>
+                                        <div class="fw-semibold">@g.Name</div>
+                                        <div class="text-muted small">@g.Size × @g.Quantity</div>
+                                    </div>
+                                </div>
+                                <div class="fw-semibold">@g.LineTotal.ToString("C")</div>
+                            </div>
+                        }
+                        <div class="d-flex justify-content-between mt-3">
+                            <div class="fw-semibold">Toplam</div>
+                            <div class="h5">@totalPrice.ToString("C")</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-lg-5">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-white">
+                        <strong>Kart Bilgileri</strong>
+                    </div>
+                    <div class="card-body">
+                        @if (!string.IsNullOrEmpty(message))
+                        {
+                            <div class="alert alert-info">@message</div>
+                        }
+
+                        @if (isAuthenticated && savedCards.Count > 0)
+                        {
+                            <div class="mb-3">
+                                <label class="form-label">Kayıtlı Kart Seç</label>
+                                <select class="form-select" @onchange="HandleSavedCardChange">
+                                    @foreach (var c in savedCards)
+                                    {
+                                        <option value="@c.Id">@c.Brand •••• @c.Last4 (@c.Expiry)</option>
+                                    }
+                                    <option value="">Yeni kart kullan</option>
+                                </select>
+                            </div>
+                        }
+
+                        <EditForm Model="payment" OnValidSubmit="SubmitPayment">
+                            <DataAnnotationsValidator />
+                            <ValidationSummary />
+
+                            <div class="mb-3">
+                                <label class="form-label">Kart Üzerindeki İsim</label>
+                                <InputText class="form-control" @bind-Value="payment.Cardholder" disabled="@useSavedCard" />
+                                <ValidationMessage For="@(() => payment.Cardholder)" />
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Kart Numarası</label>
+                                <InputText class="form-control" @bind-Value="payment.CardNumber" maxlength="19" disabled="@useSavedCard" />
+                                <div class="form-text">Sadece örnek doğrulama uygulanır.</div>
+                                <ValidationMessage For="@(() => payment.CardNumber)" />
+                            </div>
+
+                            <div class="row g-3 mb-3">
+                                <div class="col-6">
+                                    <label class="form-label">Son Kullanma (AA/YY)</label>
+                                    <InputText class="form-control" @bind-Value="payment.Expiry" maxlength="5" disabled="@useSavedCard" />
+                                    <ValidationMessage For="@(() => payment.Expiry)" />
+                                </div>
+                                <div class="col-6">
+                                    <label class="form-label">CVV</label>
+                                    <InputText class="form-control" @bind-Value="payment.Cvv" maxlength="4" />
+                                    <ValidationMessage For="@(() => payment.Cvv)" />
+                                </div>
+                            </div>
+
+                            @if (isAuthenticated && !useSavedCard)
+                            {
+                                <div class="form-check mb-3">
+                                    <InputCheckbox class="form-check-input" @bind-Value="saveCard" id="saveCardChk" />
+                                    <label class="form-check-label" for="saveCardChk">Kartı kaydet</label>
+                                </div>
+                            }
+
+                            <div class="form-check mb-3">
+                                <InputCheckbox class="form-check-input" @bind-Value="payment.AcceptedTerms" id="termsChk" />
+                                <label class="form-check-label" for="termsChk">Satış sözleşmesini kabul ediyorum</label>
+                                <ValidationMessage For="@(() => payment.AcceptedTerms)" />
+                            </div>
+
+                            <button class="btn w-100" style="background-color:#6f42c1;border-color:#6f42c1;color:#fff" type="submit">Ödemeyi Tamamla</button>
+                        </EditForm>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    private List<Pizza> cart = new();
+    private List<GroupedCartItem> groupedCart = new();
+    private decimal totalPrice;
+    private string? message;
+    private bool isAuthenticated;
+    private List<Pitzam.Models.SavedCard> savedCards = new();
+    private string? selectedSavedCardId;
+    private bool useSavedCard => !string.IsNullOrEmpty(selectedSavedCardId);
+    private bool saveCard;
+
+    protected override async Task OnInitializedAsync()
+    {
+        cart = OrderState.GetCart();
+        BuildGroups();
+        totalPrice = groupedCart.Sum(g => g.LineTotal);
+        await Auth.LoadCurrentUserAsync();
+        isAuthenticated = Auth.IsAuthenticated;
+        if (isAuthenticated && Auth.CurrentUser?.SavedCards != null)
+        {
+            savedCards = Auth.CurrentUser.SavedCards;
+            if (savedCards.Count > 0)
+            {
+                selectedSavedCardId = savedCards[0].Id;
+                var first = savedCards[0];
+                payment.Cardholder = first.Cardholder;
+                payment.CardNumber = $"**** **** **** {first.Last4}";
+                payment.Expiry = first.Expiry;
+            }
+        }
+    }
+
+    private void BuildGroups()
+    {
+        groupedCart = cart
+            .GroupBy(p => new { p.Id, Size = p.Sizes.FirstOrDefault()?.Size, p.Name, p.ImageUrl, UnitPrice = p.Price })
+            .Select(g => new GroupedCartItem
+            {
+                PizzaId = g.Key.Id,
+                Size = g.Key.Size ?? string.Empty,
+                Name = g.Key.Name,
+                ImageUrl = g.Key.ImageUrl,
+                UnitPrice = g.Key.UnitPrice,
+                Quantity = g.Count(),
+            })
+            .Select(x => { x.LineTotal = x.UnitPrice * x.Quantity; return x; })
+            .ToList();
+    }
+
+    private async Task SubmitPayment()
+    {
+        // Örnek ödeme işlemi: küçük bir gecikme ve başarı mesajı
+        message = "Ödeme işleniyor...";
+        await Task.Delay(800);
+        message = "Ödeme başarılı! Afiyet olsun.";
+
+        if (isAuthenticated && saveCard && !useSavedCard && Auth.CurrentUser != null)
+        {
+            var digits = new string((payment.CardNumber ?? string.Empty).Where(char.IsDigit).ToArray());
+            var last4 = digits.Length >= 4 ? digits.Substring(digits.Length - 4) : digits;
+            var brand = digits.StartsWith("4") ? "Visa" : (digits.StartsWith("5") ? "Mastercard" : "Card");
+
+            var card = new Pitzam.Models.SavedCard
+            {
+                Cardholder = payment.Cardholder,
+                Last4 = last4,
+                Expiry = payment.Expiry,
+                Brand = brand
+            };
+
+            var updatedUser = new Pitzam.Models.User
+            {
+                Id = Auth.CurrentUser.Id,
+                FullName = Auth.CurrentUser.FullName,
+                Email = Auth.CurrentUser.Email,
+                Phone = Auth.CurrentUser.Phone,
+                Address = Auth.CurrentUser.Address,
+                CreatedAt = Auth.CurrentUser.CreatedAt,
+                Password = string.Empty,
+                SavedAddresses = Auth.CurrentUser.SavedAddresses ?? new List<Pitzam.Models.Customer>(),
+                SavedCards = Auth.CurrentUser.SavedCards ?? new List<Pitzam.Models.SavedCard>()
+            };
+
+            if (!updatedUser.SavedCards.Any(c => c.Last4 == card.Last4 && c.Expiry == card.Expiry && c.Brand == card.Brand))
+            {
+                updatedUser.SavedCards.Add(card);
+                await Auth.UpdateUserAsync(updatedUser);
+            }
+        }
+
+        // Son siparişi al, varsa sipariş geçmişine ekle ve onay sayfasına git
+        var lastOrder = await OrderState.GetLastOrderAsync();
+        if (lastOrder != null)
+        {
+            await OrderState.AddOrderToHistoryAsync(lastOrder);
+            var orderNumber = lastOrder.OrderNumber;
+            OrderState.ClearCart();
+            await Task.Delay(600);
+            Nav.NavigateTo($"/order-confirmation/{orderNumber}");
+            return;
+        }
+
+        OrderState.ClearCart();
+        await Task.Delay(600);
+        Nav.NavigateTo("/");
+    }
+
+    private class GroupedCartItem
+    {
+        public int PizzaId { get; set; }
+        public string Size { get; set; } = string.Empty;
+        public string Name { get; set; } = string.Empty;
+        public string? ImageUrl { get; set; }
+        public decimal UnitPrice { get; set; }
+        public int Quantity { get; set; }
+        public decimal LineTotal { get; set; }
+    }
+
+    private class PaymentModel
+    {
+        [System.ComponentModel.DataAnnotations.Required]
+        [System.ComponentModel.DataAnnotations.StringLength(60, MinimumLength = 3)]
+        public string Cardholder { get; set; } = string.Empty;
+
+        [System.ComponentModel.DataAnnotations.Required]
+        [System.ComponentModel.DataAnnotations.StringLength(19, MinimumLength = 12)]
+        public string CardNumber { get; set; } = string.Empty;
+
+        [System.ComponentModel.DataAnnotations.Required]
+        [System.ComponentModel.DataAnnotations.RegularExpression(@"^(0[1-9]|1[0-2])\/\d{2}$", ErrorMessage = "AA/YY formatında giriniz")] 
+        public string Expiry { get; set; } = string.Empty;
+
+        [System.ComponentModel.DataAnnotations.Required]
+        [System.ComponentModel.DataAnnotations.StringLength(4, MinimumLength = 3)]
+        public string Cvv { get; set; } = string.Empty;
+
+        [System.ComponentModel.DataAnnotations.Range(typeof(bool), "true", "true", ErrorMessage = "Devam etmek için sözleşmeyi kabul edin")]
+        public bool AcceptedTerms { get; set; }
+    }
+
+    private PaymentModel payment = new();
+
+    private void HandleSavedCardChange(ChangeEventArgs e)
+    {
+        selectedSavedCardId = e.Value?.ToString();
+        if (!string.IsNullOrEmpty(selectedSavedCardId))
+        {
+            // Saved card selected: pre-fill masked info for display only
+            var card = savedCards.FirstOrDefault(c => c.Id == selectedSavedCardId);
+            if (card != null)
+            {
+                payment.Cardholder = card.Cardholder;
+                payment.CardNumber = $"**** **** **** {card.Last4}";
+                payment.Expiry = card.Expiry;
+            }
+        }
+        else
+        {
+            // New card path
+            payment = new PaymentModel();
+        }
+    }
+}
+}
+
+

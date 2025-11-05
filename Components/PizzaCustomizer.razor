@@ -1,0 +1,150 @@
+@using Pitzam.Models
+
+<div class="customizer">
+    <h5 class="mb-3">@Pizza.Name Özelleştirme</h5>
+
+    <div class="mb-3">
+        <label class="form-label" style="margin-right:15px;font-weight:bold;">Boyut Seç</label>
+        <div class="btn-group" role="group">
+            @foreach (var size in Pizza.Sizes)
+            {
+                var active = SelectedSize == size.Size;
+                <button type="button" class="btn @(active ? "btn-primary" : "btn-outline-primary")" @onclick="(() => SelectedSize = size.Size)">@size.Size</button>
+            }
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <div class="fw-semibold mb-2">Ek Malzemeler (+10 TL/adet)</div>
+        <div class="d-flex flex-wrap gap-3">
+            @foreach (var extra in ExtraIngredients)
+            {
+                <label class="form-check">
+                    <input class="form-check-input" type="checkbox" checked="@extra.Selected" @onchange="(e) => OnExtraChanged(extra, e)" />
+                    <span class="form-check-label">@extra.Name</span>
+                </label>
+            }
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <div class="fw-semibold mb-2">Çıkarılacak Malzemeler (ücretsiz)</div>
+        <div class="d-flex flex-wrap gap-3">
+            @foreach (var ing in Pizza.Ingredients)
+            {
+                <label class="form-check">
+                    <input class="form-check-input" type="checkbox" @onchange="e => ToggleRemove(ing, e)" />
+                    <span class="form-check-label">@ing</span>
+                </label>
+            }
+        </div>
+    </div>
+
+    <div class="d-flex align-items-center justify-content-between">
+        <div>
+            <div class="text-muted small">Anlık Fiyat</div>
+            <div class="h4 m-0">@TotalPrice TL</div>
+        </div>
+        <button class="btn btn-success" @onclick="ConfirmOrder">Sepete Ekle</button>
+    </div>
+</div>
+
+@code {
+    [Parameter] public Pizza Pizza { get; set; } = new();
+    [Parameter] public EventCallback<Order> OnOrderReady { get; set; }
+
+    // *** DEĞİŞİKLİK 1: 'SelectedSize' için bir backing field (özel alan) ekleyin ***
+    private string _selectedSize = "";
+
+    // *** DEĞİŞİKLİK 2: 'SelectedSize' değişkenini tam bir property'ye dönüştürün ***
+    // Bu sayede, değeri her değiştiğinde 'CalculatePrice' metodunu çağırabiliriz.
+    private string SelectedSize
+    {
+        get => _selectedSize;
+        set
+        {
+            // Sadece değer gerçekten değiştiyse çalıştır
+            if (_selectedSize != value)
+            {
+                _selectedSize = value;
+                CalculatePrice(); // Butona basıldığında fiyatı yeniden hesapla
+            }
+        }
+    }
+    
+    private decimal TotalPrice { get; set; }
+    private List<string> RemovedIngredients { get; set; } = new();
+
+    public class ExtraIngredient
+    {
+        public string Name { get; set; } = string.Empty;
+        public bool Selected { get; set; }
+    }
+
+    private List<ExtraIngredient> ExtraIngredients { get; set; } = new();
+
+    protected override void OnInitialized()
+    {
+        if (Pizza.Sizes.Any())
+        {
+            // *** DEĞİŞİKLİK 3: Başlangıçta 'set' bloğunu tetiklememek için
+            // doğrudan özel alanı (_selectedSize) atayın.
+            _selectedSize = Pizza.Sizes.First().Size;
+        }
+
+        // Basit örnek ekstra seti...
+        var defaultExtras = new[] { "Mantar", "Zeytin", "Sucuk", "Mozzarella", "Mısır" };
+        ExtraIngredients = defaultExtras
+            .Where(x => !Pizza.Ingredients.Contains(x, StringComparer.OrdinalIgnoreCase))
+            .Select(x => new ExtraIngredient { Name = x })
+            .ToList();
+
+        // OnInitialized sonundaki bu çağrı, ilk fiyatı doğru hesaplayacaktır.
+        CalculatePrice();
+    }
+
+    private void CalculatePrice()
+    {
+        // 'SelectedSize' yerine '_selectedSize' kullanmak daha güvenlidir.
+        var size = Pizza.Sizes.FirstOrDefault(s => s.Size == _selectedSize);
+        var basePrice = size?.Price ?? 0m;
+        var extrasCount = ExtraIngredients.Count(e => e.Selected);
+        TotalPrice = basePrice + (extrasCount * 10m);
+        StateHasChanged();
+    }
+
+    private void ToggleRemove(string ingredient, ChangeEventArgs e)
+    {
+        bool isChecked = bool.TryParse(e.Value?.ToString(), out var b) && b;
+        if (isChecked)
+        {
+            if (!RemovedIngredients.Contains(ingredient)) RemovedIngredients.Add(ingredient);
+        }
+        else
+        {
+            RemovedIngredients.Remove(ingredient);
+        }
+    }
+
+    private void OnExtraChanged(ExtraIngredient extra, ChangeEventArgs e)
+    {
+        extra.Selected = bool.TryParse(e.Value?.ToString(), out var b) && b;
+        CalculatePrice();
+    }
+
+    private async Task ConfirmOrder()
+    {
+        var order = new Order
+        {
+            PizzaName = Pizza.Name,
+            Size = _selectedSize, // _selectedSize kullan
+            Extras = ExtraIngredients.Where(x => x.Selected).Select(x => x.Name).ToList(),
+            RemovedIngredients = new List<string>(RemovedIngredients),
+            TotalPrice = TotalPrice
+        };
+
+        await OnOrderReady.InvokeAsync(order);
+    }
+}
+
+

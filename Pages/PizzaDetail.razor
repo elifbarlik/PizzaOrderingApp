@@ -1,39 +1,115 @@
-@page "/pizzas/{id}"
-@inject Pitzam.Services.PizzaService PizzaService
-@inject Pitzam.Services.OrderStateService OrderStateService
-@inject NavigationManager Navigation
+@page "/pizzas/{id:int}"
+@inject PizzaService PizzaSvc
+@inject OrderStateService OrderState
+@inject NavigationManager NavigationManager
 @using Pitzam.Models
+@using Pitzam.Services
+@*@using System.Globalization -> Artık kullanılmıyor*@ 
 
-@* ... (HTML kısmı aynı kalabilir) ... *@
-<h3>@selectedPizza?.Name</h3>
+<div class="container py-4 px-2 px-md-3 px-lg-4 d-flex justify-content-center">
+    @if (pizza == null)
+    {
+        <div class="d-flex flex-column align-items-center justify-content-center py-5">
+            <div class="spinner-border text-primary mb-3" role="status"></div>
+            <p class="text-muted">Pizza yükleniyor...</p>
+        </div>
+    }
+    else
+    {
+        <div class="w-100" style="max-width: 1100px;">
+            <div class="mb-3">
+                <a href="/" class="btn btn-light btn-sm text-dark rounded-circle d-inline-flex align-items-center justify-content-center shadow-sm" style="width:36px;height:36px" aria-label="Geri">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.0" stroke-linecap="round" stroke-linejoin="round" role="img" aria-hidden="true">
+                        <polyline points="20 18 8 12 20 6" transform="translate(-2,0)"></polyline>
+                    </svg>
+                </a>
+            </div>
+            <div class="card shadow-lg border-0 overflow-hidden mx-auto">
+            <div class="row g-4 g-lg-5 align-items-stretch">
+                <div class="col-12 col-lg-6 position-relative" style="min-height: 280px;">
+                    <img src="@pizza.ImageUrl" alt="@pizza.Name" class="w-100 h-100" style="object-fit: cover;" />
+                </div>
+                <div class="col-12 col-lg-6">
+                    <div class="p-3 p-lg-4">
+                        <h2 class="mb-2">@pizza.Name</h2>
+                        <p class="text-muted mb-3">@pizza.Description</p>
 
-@if (selectedPizza == null)
-{
-    <p>Pizza bulunamadı.</p>
-}
-else
-{
-    <PizzaCustomer Pizza="selectedPizza" OnOrderReady="HandleOrderReady" />
-}
+                        @if (pizza.Ingredients?.Any() == true)
+                        {
+                            <div class="mb-4">
+                                @foreach (var ing in pizza.Ingredients)
+                                {
+                                    <span class="badge rounded-pill text-bg-success border me-2 mb-2">@ing</span>
+                                }
+                            </div>
+                        }
 
+                        <PizzaCustomizer Pizza="pizza" OnOrderReady="HandleOrderReady" />
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+    }
+</div>
 
 @code {
-    [Parameter] public string? Id { get; set; }
-    private Pizza? selectedPizza;
+    [Parameter]
+    public int Id { get; set; }
+
+    private Pizza? pizza;
     
+    // *** KALDIRILDI ***
+    // private string? selectedSize;
+    // private CultureInfo trTR = new CultureInfo("tr-TR");
+
     protected override async Task OnInitializedAsync()
     {
-        var pizzas = await PizzaService.GetPizzasAsync();
-        selectedPizza = pizzas.FirstOrDefault(p => p.Id == Id);
+        pizza = await PizzaSvc.GetPizzaByIdAsync(Id);
+        
+        // *** KALDIRILDI ***
+        // Bu mantık artık 'PizzaCustomizer' bileşeni içinde yer alıyor.
+        // if (pizza != null && pizza.Sizes.Any())
+        // {
+        //     selectedSize = pizza.Sizes.First().Size;
+        // }
     }
 
-    private void HandleOrderReady(Order order)
+    private async Task HandleOrderReady(Order order)
     {
-        // ---- DEĞİŞİKLİK BURADA ----
-        // SetOrder (eski) yerine AddPizzaToCart (yeni) metodunu kullanıyoruz
-        OrderStateService.AddPizzaToCart(order); 
-        // ---- DEĞİŞİKLİK BİTTİ ----
+        if (pizza == null) return;
+
+        // *** DÜZELTME ***
+        // Fiyatı yeniden hesaplamak yerine doğrudan 'order' nesnesinden,
+        // yani 'PizzaCustomizer' bileşeninin hesapladığı fiyata güveniyoruz.
+        var trustedPrice = order.TotalPrice;
+        var selectedPizzaSize = pizza.Sizes.FirstOrDefault(s => s.Size == order.Size);
+
+        var orderPizza = new Pizza
+        {
+            Id = pizza.Id,
+            Name = pizza.Name,
+            Description = pizza.Description,
+            ImageUrl = pizza.ImageUrl,
+            Price = trustedPrice, // Güvenilir fiyatı kullan
+            Sizes = selectedPizzaSize != null ? new List<PizzaSize> { selectedPizzaSize } : new List<PizzaSize>()
+        };
+
+        OrderState.AddPizzaToOrder(orderPizza);
         
-        Navigation.NavigateTo("/checkout");
+        // Son sipariş detaylarını (ekstra/çıkarma ve toplam) sakla
+        // 'order' nesnesi zaten gerekli tüm bilgileri içeriyor.
+        await OrderState.PersistLastOrderAsync(new Order
+        {
+            PizzaName = pizza.Name,
+            Size = order.Size,
+            Extras = order.Extras,
+            RemovedIngredients = order.RemovedIngredients,
+            TotalPrice = trustedPrice, // Güvenilir fiyatı kullan
+            OrderNumber = string.Empty // Gerekliyse ayarla
+        });
+        
+        NavigationManager.NavigateTo("/checkout");
+        // 'await Task.CompletedTask;' burada gereksizdir.
     }
 }

@@ -1,0 +1,51 @@
+@page "/order-confirmation/{orderNumber}"
+@using Pitzam.Models
+@inject Pitzam.Services.OrderStateService OrderState
+@inject NavigationManager Nav
+
+<div class="container py-4">
+    @if (order == null)
+    {
+        <div class="alert alert-info">Sipariş bulunamadı. <a href="/">Menüye dön</a></div>
+    }
+    else
+    {
+        <h3 class="mb-3">Sipariş Onayı</h3>
+        <div class="mb-3">Sipariş No: <b>@order.OrderNumber</b></div>
+
+        <OrderSummary Order="order" />
+
+        @if (order.CustomerInfo != null)
+        {
+            <div class="card mt-3">
+                <div class="card-body">
+                    <h5 class="card-title">Teslimat</h5>
+                    <p class="card-text mb-1">@order.CustomerInfo.FullName</p>
+                    <p class="card-text mb-1">@order.CustomerInfo.Address</p>
+                    <p class="card-text mb-0">@order.CustomerInfo.Phone - @order.CustomerInfo.Email</p>
+                </div>
+            </div>
+        }
+
+        <div class="mt-4">
+            <a class="btn btn-primary" href="/">Yeni Sipariş Ver</a>
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter] public string? orderNumber { get; set; }
+    private Order? order;
+
+    protected override async Task OnInitializedAsync()
+    {
+        order = await OrderState.GetLastOrderAsync();
+        if (order != null && !string.Equals(order.OrderNumber, orderNumber, StringComparison.OrdinalIgnoreCase))
+        {
+            // Order number uyuşmazsa yine de göster, ama url'i düzelt
+            Nav.NavigateTo($"/order-confirmation/{order.OrderNumber}", true);
+        }
+    }
+}
+
+

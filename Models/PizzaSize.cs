@@ -2,8 +2,7 @@ namespace Pitzam.Models
 {
     public class PizzaSize
     {
-        public string Id { get; set; } = "";
-        public string Name { get; set; } = "";
-        public double Multiplier { get; set; }
+        public string Size { get; set; } = "";
+        public decimal Price { get; set; }
     }
 }

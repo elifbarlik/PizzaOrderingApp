@@ -12,6 +12,10 @@ namespace Pitzam.Models
         [EmailAddress(ErrorMessage = "Geçerli bir e-posta adresi giriniz.")]
         public string Email { get; set; } = "";
 
+        [Required(ErrorMessage = "Telefon zorunludur.")]
+        [Phone(ErrorMessage = "Geçerli bir telefon numarası giriniz.")]
+        public string Phone { get; set; } = "";
+
         [Required(ErrorMessage = "Adres zorunludur.")]
         [StringLength(100, MinimumLength = 5, ErrorMessage = "Adres en az 5 karakter olmalıdır.")]
         public string Address { get; set; } = "";

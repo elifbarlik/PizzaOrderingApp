@@ -1,122 +1,212 @@
 [
   {
-    "id": "1",
-    "name": "Margherita",
-    "basePrice": 120,
-    "imageUrl": "../images/pizza.jpg",
-    "ingredients": ["Mozzarella", "Domates Sosu", "Fesleğen"],
-    "sizes": [
-      { "id": "s1", "name": "Küçük", "multiplier": 1.0 },
-      { "id": "s2", "name": "Orta", "multiplier": 1.3 },
-      { "id": "s3", "name": "Büyük", "multiplier": 1.6 }
+    "Id": 1,
+    "Name": "Margherita",
+    "Description": "Klasik İtalyan lezzeti. Domates sosu, taze mozzarella ve fesleğen.",
+    "ImageUrl": "images/margherita.jpg",
+    "Ingredients": [ "Mozzarella", "Domates Sosu", "Fesleğen" ],
+    "Sizes": [
+      {
+        "Size": "Küçük",
+        "Price": 120.00
+      },
+      {
+        "Size": "Orta",
+        "Price": 156.00
+      },
+      {
+        "Size": "Büyük",
+        "Price": 192.00
+      }
     ]
   },
   {
-    "id": "2",
-    "name": "Pepperoni",
-    "basePrice": 140,
-    "imageUrl": "../images/pizza.jpg",
-    "ingredients": ["Mozzarella", "Domates Sosu", "Pepperoni"],
-    "sizes": [
-      { "id": "s1", "name": "Küçük", "multiplier": 1.0 },
-      { "id": "s2", "name": "Orta", "multiplier": 1.3 },
-      { "id": "s3", "name": "Büyük", "multiplier": 1.6 }
+    "Id": 2,
+    "Name": "Pepperoni",
+    "Description": "Bol pepperoni ve mozzarella peyniri ile acı sevenlere özel.",
+    "ImageUrl": "images/pizza.jpg",
+    "Ingredients": [ "Mozzarella", "Domates Sosu", "Pepperoni" ],
+    "Sizes": [
+      {
+        "Size": "Küçük",
+        "Price": 140.00
+      },
+      {
+        "Size": "Orta",
+        "Price": 182.00
+      },
+      {
+        "Size": "Büyük",
+        "Price": 224.00
+      }
     ]
   },
   {
-    "id": "3",
-    "name": "Vejetaryen",
-    "basePrice": 130,
-    "imageUrl": "../images/pizza.jpg",
-    "ingredients": ["Mozzarella", "Domates Sosu", "Biber", "Mantar", "Zeytin"],
-    "sizes": [
-      { "id": "s1", "name": "Küçük", "multiplier": 1.0 },
-      { "id": "s2", "name": "Orta", "multiplier": 1.3 },
-      { "id": "s3", "name": "Büyük", "multiplier": 1.6 }
+    "Id": 3,
+    "Name": "Vejetaryen",
+    "Description": "Taze sebzelerle dolu. Biber, mantar, zeytin ve mozzarella.",
+    "ImageUrl": "images/pizza.jpg",
+    "Ingredients": [ "Mozzarella", "Domates Sosu", "Biber", "Mantar", "Zeytin" ],
+    "Sizes": [
+      {
+        "Size": "Küçük",
+        "Price": 130.00
+      },
+      {
+        "Size": "Orta",
+        "Price": 169.00
+      },
+      {
+        "Size": "Büyük",
+        "Price": 208.00
+      }
     ]
   },
   {
-    "id": "4",
-    "name": "Sucuklu",
-    "basePrice": 150,
-    "imageUrl": "../images/pizza.jpg",
-    "ingredients": ["Mozzarella", "Domates Sosu", "Sucuk"],
-    "sizes": [
-      { "id": "s1", "name": "Küçük", "multiplier": 1.0 },
-      { "id": "s2", "name": "Orta", "multiplier": 1.3 },
-      { "id": "s3", "name": "Büyük", "multiplier": 1.6 }
+    "Id": 4,
+    "Name": "Sucuklu",
+    "Description": "Geleneksel lezzet. Bol sucuk, mozzarella ve domates sosu.",
+    "ImageUrl": "images/pizza.jpg",
+    "Ingredients": [ "Mozzarella", "Domates Sosu", "Sucuk" ],
+    "Sizes": [
+      {
+        "Size": "Küçük",
+        "Price": 150.00
+      },
+      {
+        "Size": "Orta",
+        "Price": 195.00
+      },
+      {
+        "Size": "Büyük",
+        "Price": 240.00
+      }
     ]
   },
   {
-    "id": "5",
-    "name": "Tavuklu BBQ",
-    "basePrice": 155,
-    "imageUrl": "../images/pizza.jpg",
-    "ingredients": ["Mozzarella", "BBQ Sosu", "Tavuk", "Soğan"],
-    "sizes": [
-      { "id": "s1", "name": "Küçük", "multiplier": 1.0 },
-      { "id": "s2", "name": "Orta", "multiplier": 1.3 },
-      { "id": "s3", "name": "Büyük", "multiplier": 1.6 }
+    "Id": 5,
+    "Name": "Tavuklu BBQ",
+    "Description": "Özel barbekü sosu, tavuk parçaları ve soğan ile dumanlı lezzet.",
+    "ImageUrl": "images/pizza.jpg",
+    "Ingredients": [ "Mozzarella", "BBQ Sosu", "Tavuk", "Soğan" ],
+    "Sizes": [
+      {
+        "Size": "Küçük",
+        "Price": 155.00
+      },
+      {
+        "Size": "Orta",
+        "Price": 201.50
+      },
+      {
+        "Size": "Büyük",
+        "Price": 248.00
+      }
     ]
   },
   {
-    "id": "6",
-    "name": "Dört Peynirli",
-    "basePrice": 160,
-    "imageUrl": "../images/pizza.jpg",
-    "ingredients": ["Mozzarella", "Cheddar", "Parmesan", "Beyaz Peynir"],
-    "sizes": [
-      { "id": "s1", "name": "Küçük", "multiplier": 1.0 },
-      { "id": "s2", "name": "Orta", "multiplier": 1.3 },
-      { "id": "s3", "name": "Büyük", "multiplier": 1.6 }
+    "Id": 6,
+    "Name": "Dört Peynirli",
+    "Description": "Tam bir peynir şöleni. Mozzarella, cheddar, parmesan ve beyaz peynir.",
+    "ImageUrl": "images/pizza.jpg",
+    "Ingredients": [ "Mozzarella", "Cheddar", "Parmesan", "Beyaz Peynir" ],
+    "Sizes": [
+      {
+        "Size": "Küçük",
+        "Price": 160.00
+      },
+      {
+        "Size": "Orta",
+        "Price": 208.00
+      },
+      {
+        "Size": "Büyük",
+        "Price": 256.00
+      }
     ]
   },
   {
-    "id": "7",
-    "name": "Ton Balıklı",
-    "basePrice": 150,
-    "imageUrl": "../images/pizza.jpg",
-    "ingredients": ["Mozzarella", "Ton Balığı", "Zeytin", "Mısır"],
-    "sizes": [
-      { "id": "s1", "name": "Küçük", "multiplier": 1.0 },
-      { "id": "s2", "name": "Orta", "multiplier": 1.3 },
-      { "id": "s3", "name": "Büyük", "multiplier": 1.6 }
+    "Id": 7,
+    "Name": "Ton Balıklı",
+    "Description": "Denizden gelen lezzet. Ton balığı, zeytin, mısır ve mozzarella.",
+    "ImageUrl": "images/pizza.jpg",
+    "Ingredients": [ "Mozzarella", "Ton Balığı", "Zeytin", "Mısır" ],
+    "Sizes": [
+      {
+        "Size": "Küçük",
+        "Price": 150.00
+      },
+      {
+        "Size": "Orta",
+        "Price": 195.00
+      },
+      {
+        "Size": "Büyük",
+        "Price": 240.00
+      }
     ]
   },
   {
-    "id": "8",
-    "name": "Kavurmalı",
-    "basePrice": 170,
-    "imageUrl": "../images/pizza.jpg",
-    "ingredients": ["Mozzarella", "Domates Sosu", "Kavurma", "Soğan"],
-    "sizes": [
-      { "id": "s1", "name": "Küçük", "multiplier": 1.0 },
-      { "id": "s2", "name": "Orta", "multiplier": 1.3 },
-      { "id": "s3", "name": "Büyük", "multiplier": 1.6 }
+    "Id": 8,
+    "Name": "Kavurmalı",
+    "Description": "Güçlü bir Anadolu tadı. Kavurma, soğan ve mozzarella.",
+    "ImageUrl": "images/pizza.jpg",
+    "Ingredients": [ "Mozzarella", "Domates Sosu", "Kavurma", "Soğan" ],
+    "Sizes": [
+      {
+        "Size": "Küçük",
+        "Price": 170.00
+      },
+      {
+        "Size": "Orta",
+        "Price": 221.00
+      },
+      {
+        "Size": "Büyük",
+        "Price": 272.00
+      }
     ]
   },
   {
-    "id": "9",
-    "name": "Deniz Mahsullü",
-    "basePrice": 180,
-    "imageUrl": "../images/pizza.jpg",
-    "ingredients": ["Mozzarella", "Karides", "Kalamar", "Sarımsak"],
-    "sizes": [
-      { "id": "s1", "name": "Küçük", "multiplier": 1.0 },
-      { "id": "s2", "name": "Orta", "multiplier": 1.3 },
-      { "id": "s3", "name": "Büyük", "multiplier": 1.6 }
+    "Id": 9,
+    "Name": "Deniz Mahsullü",
+    "Description": "Deniz tutkunlarına özel. Karides, kalamar ve sarımsaklı sos.",
+    "ImageUrl": "images/pizza.jpg",
+    "Ingredients": [ "Mozzarella", "Karides", "Kalamar", "Sarımsak" ],
+    "Sizes": [
+      {
+        "Size": "Küçük",
+        "Price": 180.00
+      },
+      {
+        "Size": "Orta",
+        "Price": 234.00
+      },
+      {
+        "Size": "Büyük",
+        "Price": 288.00
+      }
     ]
   },
   {
-    "id": "10",
-    "name": "Meksika",
-    "basePrice": 165,
-    "imageUrl": "../images/pizza.jpg",
-    "ingredients": ["Mozzarella", "Jalapeno", "Mısır", "Kırmızı Biber"],
-    "sizes": [
-      { "id": "s1", "name": "Küçük", "multiplier": 1.0 },
-      { "id": "s2", "name": "Orta", "multiplier": 1.3 },
-      { "id": "s3", "name": "Büyük", "multiplier": 1.6 }
+    "Id": 10,
+    "Name": "Meksika",
+    "Description": "Acı ve lezzetli bir macera. Jalapeno, mısır ve kırmızı biber.",
+    "ImageUrl": "images/pizza.jpg",
+    "Ingredients": [ "Mozzarella", "Jalapeno", "Mısır", "Kırmızı Biber" ],
+    "Sizes": [
+      {
+        "Size": "Küçük",
+        "Price": 165.00
+      },
+      {
+        "Size": "Orta",
+        "Price": 214.50
+      },
+      {
+        "Size": "Büyük",
+        "Price": 264.00
+      }
     ]
   }
 ]

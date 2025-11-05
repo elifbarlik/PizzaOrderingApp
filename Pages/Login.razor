@@ -1,0 +1,121 @@
+@page "/login"
+@using Pitzam.Services
+@using Microsoft.AspNetCore.Components.Forms
+@inject AuthService AuthService
+@inject NavigationManager Nav
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-5 col-lg-4">
+            <div class="card shadow-sm">
+                <div class="card-body p-4">
+                    <h2 class="card-title text-center mb-4">🔐 Giriş Yap</h2>
+                    
+                    @if (!string.IsNullOrEmpty(errorMessage))
+                    {
+                        <div class="alert alert-danger" role="alert">
+                            @errorMessage
+                        </div>
+                    }
+                    
+                    @if (!string.IsNullOrEmpty(successMessage))
+                    {
+                        <div class="alert alert-success" role="alert">
+                            @successMessage
+                        </div>
+                    }
+
+                    <EditForm Model="@loginModel" OnValidSubmit="HandleLogin">
+                        <DataAnnotationsValidator />
+                        
+                        <div class="mb-3">
+                            <label for="email" class="form-label">E-posta</label>
+                            <InputText id="email" class="form-control" @bind-Value="loginModel.Email" placeholder="ornek@email.com" />
+                            <ValidationMessage For="@(() => loginModel.Email)" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Şifre</label>
+                            <InputText id="password" type="password" class="form-control" @bind-Value="loginModel.Password" placeholder="••••••" />
+                            <ValidationMessage For="@(() => loginModel.Password)" />
+                        </div>
+
+                        <div class="d-grid mb-3">
+                            <button type="submit" class="btn btn-primary" disabled="@isLoading">
+                                @if (isLoading)
+                                {
+                                    <span class="spinner-border spinner-border-sm me-2" role="status"></span>
+                                }
+                                Giriş Yap
+                            </button>
+                        </div>
+                    </EditForm>
+
+                    <div class="text-center">
+                        <p class="mb-0">Hesabınız yok mu? <a href="/signup">Kayıt Ol</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private LoginModel loginModel = new();
+    private string? errorMessage;
+    private string? successMessage;
+    private bool isLoading = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await AuthService.LoadCurrentUserAsync();
+        
+        // Eğer zaten giriş yapmışsa ana sayfaya yönlendir
+        if (AuthService.IsAuthenticated)
+        {
+            Nav.NavigateTo("/");
+        }
+    }
+
+    private async Task HandleLogin()
+    {
+        isLoading = true;
+        errorMessage = null;
+        successMessage = null;
+        
+        try
+        {
+            var result = await AuthService.LoginAsync(loginModel.Email, loginModel.Password);
+            
+            if (result.Success)
+            {
+                successMessage = result.Message;
+                await Task.Delay(500); // Kısa bir gecikme
+                Nav.NavigateTo("/");
+            }
+            else
+            {
+                errorMessage = result.Message;
+            }
+        }
+        catch (Exception ex)
+        {
+            errorMessage = "Bir hata oluştu: " + ex.Message;
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+
+    private class LoginModel
+    {
+        [Required(ErrorMessage = "E-posta zorunludur.")]
+        [EmailAddress(ErrorMessage = "Geçerli bir e-posta adresi giriniz.")]
+        public string Email { get; set; } = "";
+
+        [Required(ErrorMessage = "Şifre zorunludur.")]
+        public string Password { get; set; } = "";
+    }
+}
+

@@ -1,0 +1,276 @@
+@page "/checkout"
+@using Pitzam.Models
+@inject Pitzam.Services.OrderStateService OrderState
+@inject Pitzam.Services.AuthService Auth
+@inject NavigationManager Nav
+@implements IDisposable
+
+<div class="container py-4">
+    <h2 class="mb-4">🛒 Sepetim</h2>
+
+    @if (cart == null || cart.Count == 0)
+    {
+        <div class="alert alert-info">Sepetiniz boş. Menüden pizza ekleyin.</div>
+        <a class="btn btn-primary" href="/">Menüye Dön</a>
+    }
+    else
+    {
+        @if (!string.IsNullOrEmpty(successMessage))
+        {
+            <div class="alert alert-success">@successMessage</div>
+        }
+
+        <div class="row g-3 mb-4">
+            @for (int i = 0; i < cart.Count; i++)
+            {
+                var p = cart[i];
+                <div class="col-12">
+                    <div class="card shadow-sm">
+                        <div class="card-body d-flex justify-content-between align-items-center">
+                            <div class="d-flex align-items-center gap-3">
+                                <img src="@p.ImageUrl" alt="@p.Name" style="width:56px;height:56px;object-fit:cover;border-radius:8px;" />
+                                <div>
+                                    <div class="fw-semibold">@p.Name</div>
+                                    <div class="text-muted small">Boyut: @p.Sizes.FirstOrDefault()?.Size</div>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center gap-2">
+                                <div class="h5 m-0">@p.Price.ToString("C")</div>
+                                <button class="btn btn-sm btn-outline-secondary" title="Düzenle" @onclick="(() => EditItem(p.Id))">Düzenle</button>
+                                <button class="btn btn-sm btn-outline-danger" title="Kaldır" @onclick="(() => RemoveItem(i))">Kaldır</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div class="fw-semibold">Toplam</div>
+            <div class="h4 m-0">@totalPrice.ToString("C")</div>
+        </div>
+
+        <h4 class="mb-3">Teslimat Bilgileri</h4>
+
+        @if (isAuthenticated && savedAddresses.Count > 0)
+        {
+            <div class="card mb-3">
+                <div class="card-body">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div class="me-3 w-100">
+                            <label class="form-label">Kayıtlı Adres Seç</label>
+                            <select class="form-select" @onchange="HandleSavedAddressChange">
+                                <option value="">Adres seçin...</option>
+                                @foreach (var addr in savedAddresses)
+                                {
+                                    <option value="@addr.Address">@addr.FullName - @addr.Address</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+
+        <EditForm Model="delivery" OnValidSubmit="(() => ProceedToPayment(delivery))">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+
+            <div class="row g-3">
+                <div class="col-12 col-md-6">
+                    <label class="form-label">Ad Soyad</label>
+                    <InputText class="form-control" @bind-Value="delivery.FullName" />
+                    <ValidationMessage For="@(() => delivery.FullName)" />
+                </div>
+                <div class="col-12 col-md-6">
+                    <label class="form-label">E-posta</label>
+                    <InputText class="form-control" @bind-Value="delivery.Email" />
+                    <ValidationMessage For="@(() => delivery.Email)" />
+                </div>
+                <div class="col-12 col-md-6">
+                    <label class="form-label">Telefon</label>
+                    <InputText class="form-control" @bind-Value="delivery.Phone" />
+                    <ValidationMessage For="@(() => delivery.Phone)" />
+                </div>
+                <div class="col-12">
+                    <label class="form-label">Adres</label>
+                    <InputTextArea class="form-control" rows="3" @bind-Value="delivery.Address" />
+                    <ValidationMessage For="@(() => delivery.Address)" />
+                </div>
+            </div>
+            @if (isAuthenticated)
+        {
+            <div class="form-check mt-2">
+                <InputCheckbox class="form-check-input" @bind-Value="saveAddress" id="saveAddrChk" />
+                <label class="form-check-label" for="saveAddrChk">Bu adresi kaydet</label>
+            </div>
+        }
+            <div class="mt-3 d-flex gap-2">
+                <button class="btn btn-primary" type="submit">Ödemeye Geç</button>
+            </div>
+        </EditForm>
+
+        
+
+        <div class="mt-3 d-flex gap-2">
+            <button class="btn btn-outline-secondary" @onclick="ClearCart">Sepeti Temizle</button>
+        </div>
+    }
+</div>
+
+@code {
+    private List<Pizza> cart = new();
+    private decimal totalPrice;
+    private string? successMessage;
+    private bool isAuthenticated;
+    private List<Customer> savedAddresses = new();
+    private Customer? selectedAddress;
+    private bool hasSelectedSavedAddress => selectedAddress != null;
+    private bool saveAddress;
+    private Customer delivery = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        LoadCart();
+        OrderState.OnChange += HandleStateChanged;
+        await Auth.LoadCurrentUserAsync();
+        isAuthenticated = Auth.IsAuthenticated;
+        if (isAuthenticated && Auth.CurrentUser?.SavedAddresses != null)
+        {
+            savedAddresses = Auth.CurrentUser.SavedAddresses;
+            // Başlangıçta adres alanlarını boş bırak
+        }
+        // Giriş/çıkış değişimlerini dinle
+        Auth.OnAuthStateChanged += HandleAuthChanged;
+    }
+
+    private void HandleStateChanged()
+    {
+        LoadCart();
+        InvokeAsync(StateHasChanged);
+    }
+
+    private void LoadCart()
+    {
+        cart = OrderState.GetCart();
+        totalPrice = cart?.Sum(p => p.Price) ?? 0m;
+    }
+
+    private async Task ProceedToPayment(Customer customer)
+    {
+        // Mevcut son özelleştirme detayları varsa onları Order'a taşı
+        var first = cart.FirstOrDefault();
+        var lastCustomized = await OrderState.GetLastOrderAsync();
+
+        var order = new Order
+        {
+            PizzaName = lastCustomized?.PizzaName ?? first?.Name ?? "Sipariş",
+            Size = lastCustomized?.Size ?? first?.Sizes?.FirstOrDefault()?.Size ?? string.Empty,
+            Extras = lastCustomized?.Extras ?? new List<string>(),
+            RemovedIngredients = lastCustomized?.RemovedIngredients ?? new List<string>(),
+            TotalPrice = lastCustomized?.TotalPrice ?? totalPrice,
+            CustomerInfo = customer,
+            OrderNumber = GenerateOrderNumber()
+        };
+
+        // Adres kaydetme
+        if (isAuthenticated && saveAddress && Auth.CurrentUser != null)
+        {
+            var updatedUser = new Pitzam.Models.User
+            {
+                Id = Auth.CurrentUser.Id,
+                FullName = Auth.CurrentUser.FullName,
+                Email = Auth.CurrentUser.Email,
+                Phone = Auth.CurrentUser.Phone,
+                Address = Auth.CurrentUser.Address,
+                CreatedAt = Auth.CurrentUser.CreatedAt,
+                Password = string.Empty,
+                SavedAddresses = Auth.CurrentUser.SavedAddresses ?? new List<Customer>(),
+                SavedCards = Auth.CurrentUser.SavedCards ?? new List<Pitzam.Models.SavedCard>()
+            };
+            if (!updatedUser.SavedAddresses.Any(a => a.FullName == customer.FullName && a.Address == customer.Address && a.Phone == customer.Phone))
+            {
+                updatedUser.SavedAddresses.Add(customer);
+                await Auth.UpdateUserAsync(updatedUser);
+            }
+        }
+
+        await OrderState.PersistLastOrderAsync(order);
+        // Ödeme sayfasına yönlendir
+        Nav.NavigateTo("/payment");
+    }
+
+    private async Task ProceedWithSelectedAddress()
+    {
+        if (selectedAddress != null)
+        {
+            ApplySelectedAddressToForm(selectedAddress);
+            await ProceedToPayment(delivery);
+        }
+    }
+
+    private void HandleSavedAddressChange(ChangeEventArgs e)
+    {
+        var val = e.Value?.ToString() ?? string.Empty;
+        selectedAddress = savedAddresses.FirstOrDefault(a => a.Address == val);
+        if (selectedAddress != null)
+        {
+            ApplySelectedAddressToForm(selectedAddress);
+        }
+    }
+
+    private void ApplySelectedAddressToForm(Customer addr)
+    {
+        delivery.FullName = addr.FullName;
+        delivery.Email = addr.Email;
+        delivery.Phone = addr.Phone;
+        delivery.Address = addr.Address;
+        StateHasChanged();
+    }
+
+    private static string GenerateOrderNumber()
+    {
+        var rnd = new Random();
+        var suffix = rnd.Next(1000, 9999);
+        return $"PZ-{DateTime.UtcNow:yyyyMMddHHmm}-{suffix}";
+    }
+
+    private void ClearCart()
+    {
+        OrderState.ClearCart();
+    }
+
+    private void RemoveItem(int index)
+    {
+        OrderState.RemovePizzaAt(index);
+    }
+
+    private void EditItem(int pizzaId)
+    {
+        Nav.NavigateTo($"/pizzas/{pizzaId}");
+    }
+
+    public void Dispose()
+    {
+        OrderState.OnChange -= HandleStateChanged;
+        Auth.OnAuthStateChanged -= HandleAuthChanged;
+    }
+
+    private async void HandleAuthChanged()
+    {
+        isAuthenticated = Auth.IsAuthenticated;
+        if (isAuthenticated && Auth.CurrentUser?.SavedAddresses != null)
+        {
+            savedAddresses = Auth.CurrentUser.SavedAddresses;
+        }
+        else
+        {
+            savedAddresses = new List<Customer>();
+            saveAddress = false;
+            selectedAddress = null;
+        }
+        await InvokeAsync(StateHasChanged);
+    }
+}
+
+

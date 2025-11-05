@@ -1,0 +1,206 @@
+/* Pages/PizzaDetail.razor.css */
+
+.pizza-detail-container[b-zfyuejkutn] {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+    min-height: 85vh;
+    background-color: #f8f9fa; /* Hafif gri arka plan */
+}
+
+.pizza-detail-card[b-zfyuejkutn] {
+    display: flex;
+    flex-direction: row; /* Masaüstünde yan yana */
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
+    overflow: hidden; /* Resim kenarlarını yuvarlatmak için */
+    max-width: 950px;
+    width: 100%;
+    transition: all 0.3s ease;
+}
+
+.pizza-detail-card:hover[b-zfyuejkutn] {
+     box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+}
+
+/* Sol Sütun: Resim */
+.pizza-image-section[b-zfyuejkutn] {
+    flex: 1.2; /* Resim alanı biraz daha büyük olsun */
+    min-width: 350px;
+}
+
+.pizza-image[b-zfyuejkutn] {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Resmin orantısını bozmadan alanı kapla */
+    display: block;
+}
+
+/* Sağ Sütun: Bilgi */
+.pizza-info-section[b-zfyuejkutn] {
+    flex: 1; /* Bilgi alanı */
+    padding: 3rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.pizza-title[b-zfyuejkutn] {
+    font-size: 2.8rem;
+    font-weight: 700;
+    color: #212529;
+    margin-bottom: 1rem;
+    line-height: 1.2;
+}
+
+.pizza-description[b-zfyuejkutn] {
+    font-size: 1.1rem;
+    color: #6c757d;
+    margin-bottom: 2rem;
+    line-height: 1.6;
+}
+
+/* Boyut Seçimi */
+.size-selection[b-zfyuejkutn] {
+    margin-bottom: 2rem;
+}
+
+.size-selection label[b-zfyuejkutn] {
+    display: block;
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #495057;
+}
+
+.form-select[b-zfyuejkutn] {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    font-size: 1rem;
+    font-weight: 500;
+    border-radius: 8px;
+    border: 1px solid #ced4da;
+    background-color: #fff;
+    appearance: none; /* Tarayıcı varsayılan okunu kaldır */
+    background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="%23343a40" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>');
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 1.2em;
+    cursor: pointer;
+    transition: border-color 0.2s ease;
+}
+
+.form-select:focus[b-zfyuejkutn] {
+    outline: none;
+    border-color: #ff6a00;
+    box-shadow: 0 0 0 3px rgba(255, 106, 0, 0.15);
+}
+
+/* Fiyat */
+.price-section[b-zfyuejkutn] {
+    margin-bottom: 2.5rem;
+    display: flex;
+    align-items: flex-end; /* Fiyat ve etiketini hizala */
+}
+
+.price-label[b-zfyuejkutn] {
+    font-size: 1.2rem;
+    color: #495057;
+    font-weight: 500;
+    margin-right: 0.75rem;
+}
+
+.price-value[b-zfyuejkutn] {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #e63946; /* Canlı bir fiyat rengi */
+    line-height: 1;
+}
+
+/* Sepete Ekle Butonu */
+.btn-add-to-order[b-zfyuejkutn] {
+    background: linear-gradient(90deg, #ff8c00, #e63946);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 1rem 1.5rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 15px rgba(230, 57, 70, 0.2);
+}
+
+.btn-add-to-order .oi[b-zfyuejkutn] {
+    margin-right: 0.75rem;
+    font-size: 1rem;
+}
+
+.btn-add-to-order:hover[b-zfyuejkutn] {
+    transform: translateY(-3px);
+    box-shadow: 0 7px 20px rgba(230, 57, 70, 0.3);
+}
+
+.btn-add-to-order:active[b-zfyuejkutn] {
+     transform: translateY(-1px);
+     box-shadow: 0 4px 15px rgba(230, 57, 70, 0.2);
+}
+
+/* Yüklenme Ekranı */
+.loading[b-zfyuejkutn] {
+    text-align: center;
+    padding: 4rem;
+    color: #6c757d;
+    font-size: 1.2rem;
+}
+
+.spinner[b-zfyuejkutn] {
+    border: 5px solid #f3f3f3;
+    border-top: 5px solid #e63946;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin-b-zfyuejkutn 1s linear infinite;
+    margin: 0 auto 20px auto;
+}
+
+@keyframes spin-b-zfyuejkutn {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Mobil Cihazlar (Responsive) */
+@media (max-width: 800px) {
+    .pizza-detail-container[b-zfyuejkutn] {
+        padding: 0.5rem;
+    }
+    
+    .pizza-detail-card[b-zfyuejkutn] {
+        flex-direction: column; /* Sütunları alt alta diz */
+        margin: 1rem;
+    }
+    
+    .pizza-image-section[b-zfyuejkutn] {
+        min-width: auto;
+        max-height: 300px; /* Resim çok yer kaplamasın */
+    }
+
+    .pizza-info-section[b-zfyuejkutn] {
+        padding: 2rem;
+    }
+
+    .pizza-title[b-zfyuejkutn] {
+        font-size: 2.2rem;
+    }
+
+    .price-value[b-zfyuejkutn] {
+        font-size: 2rem;
+    }
+}

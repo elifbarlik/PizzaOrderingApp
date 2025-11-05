@@ -1,7 +1,8 @@
 ﻿@inject Pitzam.Services.OrderStateService OrderStateService
+@inject Pitzam.Services.AuthService AuthService
 @implements IDisposable
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm sticky-top">
+<nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm sticky-top">
     <div class="container">
         
         <a class="navbar-brand" href="">
@@ -33,7 +34,7 @@
                         
                         @if(orderCount > 0)
                         {
-                            <span class="badge rounded-pill bg-light text-dark ms-1">@orderCount</span>
+                            <span class="badge rounded-pill bg-success text-light ms-1">@orderCount</span>
                         }
                     </NavLink>
                 </li>
@@ -41,26 +42,51 @@
             
             @* Sağa Hizalı Linkler (Sepet ve Profil) *@
             <ul class="navbar-nav">
-                
-                
-                @* Yeni Profil Dropdown *@
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="bi bi-person-circle">e</i>
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
-                        <li>
-                            <NavLink class="dropdown-item" href="/profile">
-                                <i class="bi bi-person-fill"></i> Profilim
-                            </NavLink>
-                        </li>
-                        <li>
-                            <NavLink class="dropdown-item" href="/settings"> @* Ayarlar için bir sayfa yolu varsayıldı *@
-                                <i class="bi bi-gear-fill"></i> Ayarlar
-                            </NavLink>
-                        </li>
-                    </ul>
-                </li>
+                @if (isAuthenticated)
+                {
+                    @* Kullanıcı giriş yapmışsa Profil Dropdown *@
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-person-circle"></i>
+                            @if (AuthService.CurrentUser != null)
+                            {
+                                <span class="ms-1">@AuthService.CurrentUser.FullName</span>
+                            }
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
+                            <li>
+                                <NavLink class="dropdown-item" href="/profile">
+                                    <i class="bi bi-person-fill"></i> Profilim
+                                </NavLink>
+                            </li>
+                            <li>
+                                <NavLink class="dropdown-item" href="/settings">
+                                    <i class="bi bi-gear-fill"></i> Ayarlar
+                                </NavLink>
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <a class="dropdown-item" href="#" @onclick="HandleLogout" @onclick:preventDefault>
+                                    <i class="bi bi-box-arrow-right"></i> Çıkış Yap
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                }
+                else
+                {
+                    @* Kullanıcı giriş yapmamışsa Üye Ol ve Giriş Yap linkleri *@
+                    <li class="nav-item">
+                        <NavLink class="nav-link" href="/signup">
+                            <i class="bi bi-person-plus-fill"></i> Üye Ol
+                        </NavLink>
+                    </li>
+                    <li class="nav-item">
+                        <NavLink class="nav-link" href="/login">
+                            <i class="bi bi-box-arrow-in-right"></i> Giriş Yap
+                        </NavLink>
+                    </li>
+                }
             </ul>
         </div>
     </div>
@@ -70,14 +96,20 @@
     private bool collapseNavMenu = true;
     private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
     private int orderCount = 0;
+    private bool isAuthenticated = false;
+
     private void ToggleNavMenu()
     {
         collapseNavMenu = !collapseNavMenu;
     }
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
         OrderStateService.OnChange += UpdateOrderCount;
+        AuthService.OnAuthStateChanged += UpdateAuthState;
+        
+        await AuthService.LoadCurrentUserAsync();
+        UpdateAuthState();
         UpdateOrderCount();
     }
 
@@ -88,8 +120,20 @@
         InvokeAsync(StateHasChanged);
     }
 
+    private void UpdateAuthState()
+    {
+        isAuthenticated = AuthService.IsAuthenticated;
+        InvokeAsync(StateHasChanged);
+    }
+
+    private async Task HandleLogout()
+    {
+        await AuthService.LogoutAsync();
+    }
+
     public void Dispose()
     {
         OrderStateService.OnChange -= UpdateOrderCount;
+        AuthService.OnAuthStateChanged -= UpdateAuthState;
     }
 }
