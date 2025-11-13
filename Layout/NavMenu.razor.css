@@ -36,12 +36,10 @@
     top: -2px; /* Sayacı biraz yukarı kaydırır */
 }
 
-/* YENİ EKLENEN STİLLER (DÜZENLENDİ) */
 
-/* Avatar ikonunu biraz daha belirgin hale getirir ve hizalar */
 .navbar-nav .dropdown-toggle i {
-    font-size: 1.3rem; /* Boyutu biraz küçülttük (1.5rem idi) */
-    font-style: normal; /* "İtalik" görünümü kaldırmak için */
+    font-size: 1.3rem; 
+    font-style: normal;
     vertical-align: middle;
     margin-right: 0; 
 }
@@ -53,13 +51,11 @@
     font-size: 1rem;
 }
 
-/* Masaüstünde (lg ve üzeri) dropdown'ı hover ile açar (DÜZENLENDİ) */
 @media (min-width: 992px) {
     .dropdown:hover .dropdown-menu {
         display: block;
-        margin-top: .125rem; /* Navbar ile arasında hafif bir boşluk bırakır (0 idi) */
-        right: 0; /* Konumu sağa sıfırlar (Bootstrap 5'in 'dropdown-menu-end' hizalamasını garantiler) */
-        left: auto; /* Sol konumlamayı iptal eder */
+        right: 0;
+        left: auto;
     }
 
     /* Hover ile açıldığında avatar linkinin de aktif görünmesini sağlar */

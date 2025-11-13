@@ -28,7 +28,6 @@ namespace Pitzam.Services
             return _pizzasCache;
         }
 
-        // --- YENİ EKLENEN METOT ---
         /// <summary>
         /// Verilen Id'ye göre bir pizzayı bulur.
         /// </summary>

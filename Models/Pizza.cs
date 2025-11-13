@@ -4,8 +4,6 @@ namespace Pitzam.Models
 {
     public class Pizza
     {
-        // PizzaDetail.razor'daki Id:int parametresine uyması için
-        // Id'yi int yapıyoruz.
         public int Id { get; set; } 
 
         public string Name { get; set; } = "";

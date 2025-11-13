@@ -53,11 +53,8 @@
     [Parameter] public Pizza Pizza { get; set; } = new();
     [Parameter] public EventCallback<Order> OnOrderReady { get; set; }
 
-    // *** DEĞİŞİKLİK 1: 'SelectedSize' için bir backing field (özel alan) ekleyin ***
     private string _selectedSize = "";
 
-    // *** DEĞİŞİKLİK 2: 'SelectedSize' değişkenini tam bir property'ye dönüştürün ***
-    // Bu sayede, değeri her değiştiğinde 'CalculatePrice' metodunu çağırabiliriz.
     private string SelectedSize
     {
         get => _selectedSize;
@@ -87,12 +84,9 @@
     {
         if (Pizza.Sizes.Any())
         {
-            // *** DEĞİŞİKLİK 3: Başlangıçta 'set' bloğunu tetiklememek için
-            // doğrudan özel alanı (_selectedSize) atayın.
             _selectedSize = Pizza.Sizes.First().Size;
         }
 
-        // Basit örnek ekstra seti...
         var defaultExtras = new[] { "Mantar", "Zeytin", "Sucuk", "Mozzarella", "Mısır" };
         ExtraIngredients = defaultExtras
             .Where(x => !Pizza.Ingredients.Contains(x, StringComparer.OrdinalIgnoreCase))
@@ -105,7 +99,6 @@
 
     private void CalculatePrice()
     {
-        // 'SelectedSize' yerine '_selectedSize' kullanmak daha güvenlidir.
         var size = Pizza.Sizes.FirstOrDefault(s => s.Size == _selectedSize);
         var basePrice = size?.Price ?? 0m;
         var extrasCount = ExtraIngredients.Count(e => e.Selected);
@@ -137,7 +130,7 @@
         var order = new Order
         {
             PizzaName = Pizza.Name,
-            Size = _selectedSize, // _selectedSize kullan
+            Size = _selectedSize,
             Extras = ExtraIngredients.Where(x => x.Selected).Select(x => x.Name).ToList(),
             RemovedIngredients = new List<string>(RemovedIngredients),
             TotalPrice = TotalPrice
