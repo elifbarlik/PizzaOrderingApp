@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Pitzam")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+8f3fe94db73b90cc64e13aa6008dd62424016655")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e112fdbd07c0baee726ca5e1c2cb4ca09f82e643")]
 [assembly: System.Reflection.AssemblyProductAttribute("Pitzam")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Pitzam")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
