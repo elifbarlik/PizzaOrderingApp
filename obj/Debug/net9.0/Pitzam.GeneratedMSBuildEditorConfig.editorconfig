@@ -13,85 +13,85 @@ build_property.EnforceExtendedAnalyzerRules =
 build_property._SupportedPlatformList = browser
 build_property.RootNamespace = Pitzam
 build_property.RootNamespace = Pitzam
-build_property.ProjectDir = C:\Users\elifb\Desktop\Pitza\Pitzam\
+build_property.ProjectDir = C:\Users\elifb\Desktop\1220505020_ElifBARLIK\Pitzam\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = false
 build_property.RazorLangVersion = 9.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = C:\Users\elifb\Desktop\Pitza\Pitzam
+build_property.MSBuildProjectDirectory = C:\Users\elifb\Desktop\1220505020_ElifBARLIK\Pitzam
 build_property._RazorSourceGeneratorDebug = 
 build_property.EffectiveAnalysisLevelStyle = 9.0
 build_property.EnableCodeStyleSeverity = 
 
-[C:/Users/elifb/Desktop/Pitza/Pitzam/App.razor]
+[C:/Users/elifb/Desktop/1220505020_ElifBARLIK/Pitzam/App.razor]
 build_metadata.AdditionalFiles.TargetPath = QXBwLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/elifb/Desktop/Pitza/Pitzam/Components/CustomerForm.razor]
+[C:/Users/elifb/Desktop/1220505020_ElifBARLIK/Pitzam/Components/CustomerForm.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xDdXN0b21lckZvcm0ucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/elifb/Desktop/Pitza/Pitzam/Components/OrderSummary.razor]
+[C:/Users/elifb/Desktop/1220505020_ElifBARLIK/Pitzam/Components/OrderSummary.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xPcmRlclN1bW1hcnkucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/elifb/Desktop/Pitza/Pitzam/Components/PizzaCustomizer.razor]
+[C:/Users/elifb/Desktop/1220505020_ElifBARLIK/Pitzam/Components/PizzaCustomizer.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQaXp6YUN1c3RvbWl6ZXIucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/elifb/Desktop/Pitza/Pitzam/Pages/Checkout.razor]
+[C:/Users/elifb/Desktop/1220505020_ElifBARLIK/Pitzam/Pages/Checkout.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ2hlY2tvdXQucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/elifb/Desktop/Pitza/Pitzam/Pages/Login.razor]
+[C:/Users/elifb/Desktop/1220505020_ElifBARLIK/Pitzam/Pages/Login.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTG9naW4ucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/elifb/Desktop/Pitza/Pitzam/Pages/OrderConfirmation.razor]
+[C:/Users/elifb/Desktop/1220505020_ElifBARLIK/Pitzam/Pages/OrderConfirmation.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcT3JkZXJDb25maXJtYXRpb24ucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/elifb/Desktop/Pitza/Pitzam/Pages/Orders.razor]
+[C:/Users/elifb/Desktop/1220505020_ElifBARLIK/Pitzam/Pages/Orders.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcT3JkZXJzLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/elifb/Desktop/Pitza/Pitzam/Pages/Payment.razor]
+[C:/Users/elifb/Desktop/1220505020_ElifBARLIK/Pitzam/Pages/Payment.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUGF5bWVudC5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/elifb/Desktop/Pitza/Pitzam/Pages/Profile.razor]
+[C:/Users/elifb/Desktop/1220505020_ElifBARLIK/Pitzam/Pages/Profile.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUHJvZmlsZS5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/elifb/Desktop/Pitza/Pitzam/Pages/Settings.razor]
+[C:/Users/elifb/Desktop/1220505020_ElifBARLIK/Pitzam/Pages/Settings.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2V0dGluZ3MucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/elifb/Desktop/Pitza/Pitzam/Pages/Signup.razor]
+[C:/Users/elifb/Desktop/1220505020_ElifBARLIK/Pitzam/Pages/Signup.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2lnbnVwLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/elifb/Desktop/Pitza/Pitzam/_Imports.razor]
+[C:/Users/elifb/Desktop/1220505020_ElifBARLIK/Pitzam/_Imports.razor]
 build_metadata.AdditionalFiles.TargetPath = X0ltcG9ydHMucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/elifb/Desktop/Pitza/Pitzam/Components/IngredientFilter.razor]
+[C:/Users/elifb/Desktop/1220505020_ElifBARLIK/Pitzam/Components/IngredientFilter.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xJbmdyZWRpZW50RmlsdGVyLnJhem9y
 build_metadata.AdditionalFiles.CssScope = b-i62riu6690
 
-[C:/Users/elifb/Desktop/Pitza/Pitzam/Layout/MainLayout.razor]
+[C:/Users/elifb/Desktop/1220505020_ElifBARLIK/Pitzam/Layout/MainLayout.razor]
 build_metadata.AdditionalFiles.TargetPath = TGF5b3V0XE1haW5MYXlvdXQucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = b-ozygbvnhd8
 
-[C:/Users/elifb/Desktop/Pitza/Pitzam/Layout/NavMenu.razor]
+[C:/Users/elifb/Desktop/1220505020_ElifBARLIK/Pitzam/Layout/NavMenu.razor]
 build_metadata.AdditionalFiles.TargetPath = TGF5b3V0XE5hdk1lbnUucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = b-3gnmqkc5mb
 
-[C:/Users/elifb/Desktop/Pitza/Pitzam/Pages/PizzaDetail.razor]
+[C:/Users/elifb/Desktop/1220505020_ElifBARLIK/Pitzam/Pages/PizzaDetail.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUGl6emFEZXRhaWwucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = b-zfyuejkutn
 
-[C:/Users/elifb/Desktop/Pitza/Pitzam/Pages/Pizzas.razor]
+[C:/Users/elifb/Desktop/1220505020_ElifBARLIK/Pitzam/Pages/Pizzas.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUGl6emFzLnJhem9y
 build_metadata.AdditionalFiles.CssScope = b-g2l68eszh3

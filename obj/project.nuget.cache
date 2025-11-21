@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "czMYCfFnUiM=",
+  "dgSpecHash": "jtkT7FWJhVI=",
   "success": true,
-  "projectFilePath": "C:\\Users\\elifb\\Desktop\\Pitza\\Pitzam\\Pitzam.csproj",
+  "projectFilePath": "C:\\Users\\elifb\\Desktop\\1220505020_ElifBARLIK\\Pitzam\\Pitzam.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\elifb\\.nuget\\packages\\blazored.localstorage\\4.5.0\\blazored.localstorage.4.5.0.nupkg.sha512",
     "C:\\Users\\elifb\\.nuget\\packages\\microsoft.aspnetcore.authorization\\9.0.10\\microsoft.aspnetcore.authorization.9.0.10.nupkg.sha512",
